@@ -8,7 +8,7 @@ import dotenv
 
 
 def main():
-    dotenv.load_dotenv(dotenv_path=Path('core/.env'))
+    dotenv.load_dotenv(dotenv_path=Path("core/.env"))
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
     try:
