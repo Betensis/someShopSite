@@ -5,17 +5,17 @@ from .models import MainCategory, Subcategory, Shoes
 
 @admin.register(MainCategory)
 class MainCategoryAdmin(admin.ModelAdmin):
-    list_display = ["name"]
+    list_display = ["title"]
 
 
 @admin.register(Subcategory)
 class SubcategoryAdmin(admin.ModelAdmin):
-    list_display = ["name", "main_category"]
+    list_display = ["title", "main_category"]
 
 
 @admin.register(Shoes)
 class ShoesAdmin(admin.ModelAdmin):
-    list_display = ["name", "description", "price", "category", "main_category"]
+    list_display = ["title", "description", "price", "category", "main_category"]
 
     @admin.display(description="Основная категория")
     def main_category(self, obj):
