@@ -4,14 +4,17 @@ from djmoney.models.fields import MoneyField
 
 
 class MainCategory(models.Model):
-    name = models.CharField(
+    title = models.CharField(
         verbose_name=_("название"),
         max_length=150,
         unique=True,
     )
+    slug = models.SlugField(
+        unique=True,
+    )
 
     def __str__(self):
-        return self.name
+        return self.title
 
     class Meta:
         verbose_name = _("Основная категория")
@@ -19,7 +22,7 @@ class MainCategory(models.Model):
 
 
 class Subcategory(models.Model):
-    name = models.CharField(
+    title = models.CharField(
         verbose_name=_("название"),
         max_length=150,
         unique=True,
@@ -29,9 +32,10 @@ class Subcategory(models.Model):
         on_delete=models.CASCADE,
         related_name="subcategory",
     )
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.title}"
 
     class Meta:
         verbose_name = _("Подкатегория")
@@ -39,7 +43,7 @@ class Subcategory(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(
+    title = models.CharField(
         verbose_name=_("название"),
         max_length=150,
         unique=True,
@@ -57,11 +61,16 @@ class Product(models.Model):
         Subcategory,
         models.CASCADE,
         verbose_name=_("категория"),
-        related_name="products",
+    )
+    image = models.ImageField(
+        _("фотокарточка"),
+    )
+    slug = models.SlugField(
+        unique=True,
     )
 
     def __str__(self):
-        return self.name
+        return self.title
 
     class Meta:
         abstract = True
@@ -71,3 +80,7 @@ class Shoes(Product):
     class Meta:
         verbose_name = _("Обувь")
         verbose_name_plural = _("Обувь")
+
+
+class Test(Product):
+    pass
