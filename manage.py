@@ -2,9 +2,6 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from pathlib import Path
-
-import dotenv
 
 
 def main():
@@ -18,7 +15,12 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-    execute_from_command_line(sys.argv)
+    from dev.manage import is_custom_args, start_custom_func
+
+    if is_custom_args(sys.argv):
+        start_custom_func(sys.argv)
+    else:
+        execute_from_command_line(sys.argv)
 
 
 if __name__ == "__main__":
