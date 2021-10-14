@@ -42,7 +42,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 APPS = [
-    'main',
+    "main",
 ]
 
 INSTALLED_APPS = [
