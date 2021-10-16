@@ -42,6 +42,14 @@ class Subcategory(models.Model):
         verbose_name_plural = _("Подкатегории")
 
 
+class Brand(models.Model):
+    title = models.CharField(
+        verbose_name=_("название"),
+        max_length=150,
+        unique=True,
+    )
+
+
 class Product(models.Model):
     title = models.CharField(
         verbose_name=_("название"),
@@ -68,6 +76,12 @@ class Product(models.Model):
     slug = models.SlugField(
         unique=True,
     )
+    brand = models.ForeignKey(
+        Brand,
+        models.CASCADE,
+        verbose_name=_("бренд"),
+        related_name="products",
+    )
 
     def __str__(self):
         return self.title
@@ -80,7 +94,3 @@ class Shoes(Product):
     class Meta:
         verbose_name = _("Обувь")
         verbose_name_plural = _("Обувь")
-
-
-class Test(Product):
-    pass
