@@ -49,6 +49,13 @@ class Brand(models.Model):
         unique=True,
     )
 
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _("бренд")
+        verbose_name_plural = _("бренды")
+
 
 class Product(models.Model):
     title = models.CharField(
