@@ -15,7 +15,14 @@ class SubcategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Shoes, Hat)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ["title", "description", "price", "category", "brand"]
+    list_display = [
+        "title",
+        "description",
+        "price",
+        "category",
+        "get_main_category",
+        "brand",
+    ]
 
     @admin.display(description="Основная категория")
     def get_main_category(self, obj):
