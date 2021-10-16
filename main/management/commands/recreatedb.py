@@ -8,5 +8,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         call_command("flush", database="default")
         call_command("deletemigrationsdir")
-        call_command("makemigrations", 'main')
+        call_command("makemigrations", "main")
         call_command("migrate", "--run-syncdb")
