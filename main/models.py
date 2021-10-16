@@ -30,7 +30,7 @@ class Subcategory(models.Model):
     main_category = models.ForeignKey(
         MainCategory,
         on_delete=models.CASCADE,
-        related_name="subcategory",
+        related_name="subcategories",
     )
     slug = models.SlugField(unique=True)
 
