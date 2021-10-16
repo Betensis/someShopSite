@@ -87,7 +87,6 @@ class Product(models.Model):
         Brand,
         models.CASCADE,
         verbose_name=_("бренд"),
-        related_name="products",
     )
 
     def __str__(self):
@@ -101,3 +100,9 @@ class Shoes(Product):
     class Meta:
         verbose_name = _("Обувь")
         verbose_name_plural = _("Обувь")
+
+
+class Hat(Product):
+    class Meta:
+        verbose_name = _("головной убор")
+        verbose_name_plural = _("головные уборы")
