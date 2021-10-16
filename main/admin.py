@@ -22,6 +22,7 @@ class ProductAdmin(admin.ModelAdmin):
         "category",
         "get_main_category",
         "brand",
+        "slug",
     ]
 
     @admin.display(description="Основная категория")
@@ -30,5 +31,5 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 @admin.register(Brand)
-class Brand(admin.ModelAdmin):
+class BrandAdmin(admin.ModelAdmin):
     list_display = ["title"]
