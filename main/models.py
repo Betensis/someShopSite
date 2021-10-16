@@ -1,3 +1,4 @@
+from autoslug import AutoSlugField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
@@ -13,8 +14,8 @@ class MainCategory(models.Model):
         max_length=150,
         unique=True,
     )
-    slug = models.SlugField(
-        unique=True,
+    slug = AutoSlugField(
+        populate_from="title",
     )
 
     def __str__(self):
@@ -36,7 +37,9 @@ class Subcategory(models.Model):
         on_delete=models.CASCADE,
         related_name="subcategories",
     )
-    slug = models.SlugField(unique=True)
+    slug = AutoSlugField(
+        populate_from="title",
+    )
 
     def __str__(self):
         return self.title
@@ -51,6 +54,10 @@ class Brand(models.Model):
         verbose_name=_("название"),
         max_length=150,
         unique=True,
+    )
+
+    slug = AutoSlugField(
+        populate_from="title",
     )
 
     def __str__(self):
@@ -83,8 +90,8 @@ class Product(models.Model):
     image = models.ImageField(
         _("фотокарточка"),
     )
-    slug = models.SlugField(
-        unique=True,
+    slug = AutoSlugField(
+        populate_from="title",
     )
     brand = models.ForeignKey(
         Brand,
