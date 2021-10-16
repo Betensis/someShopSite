@@ -4,6 +4,10 @@ from djmoney.models.fields import MoneyField
 
 
 class MainCategory(models.Model):
+    class Meta:
+        verbose_name = _("Основная категория")
+        verbose_name_plural = _("Основные категории")
+
     title = models.CharField(
         verbose_name=_("название"),
         max_length=150,
@@ -16,12 +20,12 @@ class MainCategory(models.Model):
     def __str__(self):
         return self.title
 
-    class Meta:
-        verbose_name = _("Основная категория")
-        verbose_name_plural = _("Основные категории")
-
 
 class Subcategory(models.Model):
+    class Meta:
+        verbose_name = _("Подкатегория")
+        verbose_name_plural = _("Подкатегории")
+
     title = models.CharField(
         verbose_name=_("название"),
         max_length=150,
@@ -35,14 +39,14 @@ class Subcategory(models.Model):
     slug = models.SlugField(unique=True)
 
     def __str__(self):
-        return f"{self.title}"
-
-    class Meta:
-        verbose_name = _("Подкатегория")
-        verbose_name_plural = _("Подкатегории")
+        return self.title
 
 
 class Brand(models.Model):
+    class Meta:
+        verbose_name = _("бренд")
+        verbose_name_plural = _("бренды")
+
     title = models.CharField(
         verbose_name=_("название"),
         max_length=150,
@@ -52,12 +56,11 @@ class Brand(models.Model):
     def __str__(self):
         return self.title
 
-    class Meta:
-        verbose_name = _("бренд")
-        verbose_name_plural = _("бренды")
-
 
 class Product(models.Model):
+    class Meta:
+        abstract = True
+
     title = models.CharField(
         verbose_name=_("название"),
         max_length=150,
@@ -91,9 +94,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
-
-    class Meta:
-        abstract = True
 
 
 class Shoes(Product):
