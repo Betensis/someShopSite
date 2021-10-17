@@ -17,7 +17,7 @@ class MainCategory(models.Model):
     slug = AutoSlugField(
         populate_from="title",
         unique=True,
-        unique_with='title',
+        unique_with="title",
         editable=True,
     )
 
@@ -43,7 +43,7 @@ class Subcategory(models.Model):
     slug = AutoSlugField(
         populate_from="title",
         unique=True,
-        unique_with='title',
+        unique_with="title",
         editable=True,
     )
 
@@ -65,7 +65,7 @@ class Brand(models.Model):
     slug = AutoSlugField(
         populate_from="title",
         unique=True,
-        unique_with='title',
+        unique_with="title",
         editable=True,
     )
 
@@ -102,7 +102,7 @@ class Product(models.Model):
     slug = AutoSlugField(
         populate_from="title",
         unique=True,
-        unique_with='title',
+        unique_with="title",
         editable=True,
     )
     brand = models.ForeignKey(
