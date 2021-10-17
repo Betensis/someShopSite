@@ -10,6 +10,7 @@ python-dotenv = "*"
 django-money = "*"
 pillow = "*"
 django-autoslug = "*"
+unidecode = "*"
 
 [dev-packages]
 black = "==21.8b0"
