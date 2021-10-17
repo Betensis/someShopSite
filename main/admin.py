@@ -5,16 +5,28 @@ from .models import MainCategory, Subcategory, Shoes, Brand, Hat
 
 @admin.register(MainCategory)
 class MainCategoryAdmin(admin.ModelAdmin):
-    list_display = ["title"]
+    prepopulated_fields = {"slug": ("title",)}
+    list_display = [
+        "title",
+        "slug",
+    ]
 
 
 @admin.register(Subcategory)
 class SubcategoryAdmin(admin.ModelAdmin):
-    list_display = ["title", "main_category"]
+    prepopulated_fields = {"slug": ("title",)}
+    list_display = [
+        "title",
+        "main_category",
+        "slug",
+    ]
 
 
 @admin.register(Shoes, Hat)
 class ProductAdmin(admin.ModelAdmin):
+    prepopulated_fields = {
+        "slug": ("title",),
+    }
     list_display = [
         "title",
         "description",
@@ -32,4 +44,8 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
-    list_display = ["title"]
+    prepopulated_fields = {"slug": ("title",)}
+    list_display = [
+        "title",
+        "slug",
+    ]
