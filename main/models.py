@@ -16,6 +16,9 @@ class MainCategory(models.Model):
     )
     slug = AutoSlugField(
         populate_from="title",
+        unique=True,
+        unique_with='title',
+        editable=True,
     )
 
     def __str__(self):
@@ -39,6 +42,9 @@ class Subcategory(models.Model):
     )
     slug = AutoSlugField(
         populate_from="title",
+        unique=True,
+        unique_with='title',
+        editable=True,
     )
 
     def __str__(self):
@@ -58,6 +64,9 @@ class Brand(models.Model):
 
     slug = AutoSlugField(
         populate_from="title",
+        unique=True,
+        unique_with='title',
+        editable=True,
     )
 
     def __str__(self):
@@ -92,6 +101,9 @@ class Product(models.Model):
     )
     slug = AutoSlugField(
         populate_from="title",
+        unique=True,
+        unique_with='title',
+        editable=True,
     )
     brand = models.ForeignKey(
         Brand,
