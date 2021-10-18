@@ -21,7 +21,7 @@ default_categories = {
 
 
 class Command(BaseCommand):
-    help = f'Fills the database with the following categories: {default_categories}'
+    help = f"Fills the database with the following categories: {default_categories}"
 
     def handle(self, *args, **options):
         for main_category, subcategories in default_categories.items():
