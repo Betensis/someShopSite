@@ -1,7 +1,11 @@
 from autoslug import AutoSlugField
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
+
+
+User = get_user_model()
 
 
 class MainCategory(models.Model):
@@ -73,7 +77,7 @@ class Brand(models.Model):
         return self.title
 
 
-class Product(models.Model):
+class Item(models.Model):
     class Meta:
         abstract = True
 
@@ -115,13 +119,13 @@ class Product(models.Model):
         return self.title
 
 
-class Shoes(Product):
+class Shoes(Item):
     class Meta:
         verbose_name = _("Обувь")
         verbose_name_plural = _("Обувь")
 
 
-class Hat(Product):
+class Hat(Item):
     class Meta:
         verbose_name = _("головной убор")
         verbose_name_plural = _("головные уборы")
