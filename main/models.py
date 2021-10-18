@@ -145,6 +145,12 @@ class OrderItem(models.Model):
     content_object = GenericForeignKey("content_type", "object_id")
     quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
 
+    def get_content_type_repr(self):
+        return str(self.content_type).split("|")[1]
+
+    def __str__(self):
+        return f"{self.customer} {self.get_content_type_repr()} id:{self.object_id}"
+
 
 class Order(models.Model):
     customer = models.ForeignKey(
@@ -154,3 +160,11 @@ class Order(models.Model):
     items = models.ManyToManyField(OrderItem)
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField()
+
+    def __str__(self):
+        return f"{self.customer.username}: " + ", ".join(
+            map(
+                lambda item: item.get_content_type_repr() + str(item.object_id),
+                self.items.all()[:3],
+            )
+        )
