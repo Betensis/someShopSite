@@ -10,6 +10,8 @@ default_brands = [
 
 
 class Command(BaseCommand):
+    help = f'Fills the database with the following brands: {default_brands}'
+
     def handle(self, *args, **options):
         for brand_title in default_brands:
             Brand.objects.get_or_create(title=brand_title)
