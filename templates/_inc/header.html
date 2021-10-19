@@ -1,3 +1,44 @@
+{% load static %}
 <header>
+        <div class="header__wrapper">
+            <img src= "{% static 'main/img/main_back.jpg' %}" alt="main_back" class="main_back">
+            
+            <div class="header__navbar">               
+                <div class="nav">
+                    <ul class="nav__links">
+                        <li><a href="#">мужчины</a></li>
+                        <li><a href="#">женщины</a></li>
+                        <li><a href="#">дети</a></li>
+                    </ul>
+                </div>
     
+                <a href="#" class="logo">Django</a>
+                
+                <div class="nav">
+                    <ul class="nav__links">
+                        <li><a href="#" class="login__bin">войти</a></li>
+                        <img src="{% static 'main/icons/bin.svg' %}" alt="bin" class="bin">
+                        <li><a href="#" class="login__bin">корзина</a></li>
+                    </ul>
+                </div>
+    
+            </div>
+        </div>
+
+        <div class="catalog_main">
+            <div class="slogan">Think Different</div>
+            <div class="nav__catalog">
+                <ul>
+                    <li><a href="#">новинки</a></li>
+                    <li><a href="#">одежда</a></li>
+                    <li><a href="#">обувь</a></li>
+                    <li><a href="#">аксессуары</a></li>
+                    <li><a href="#">спорт</a></li>
+                </ul>
+            </div>
+            <div class="search__wrapper">
+                <input type="text" name="search__input" placeholder="Хуй">
+                <img src="{% static 'main/icons/search.svg' %}" alt="search" class="search">
+            </div>
+        </div>
 </header>
