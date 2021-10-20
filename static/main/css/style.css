@@ -1,0 +1,14 @@
+* {
+    margin: 0;
+}
+
+html,body {
+    min-width: 100%;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+}
