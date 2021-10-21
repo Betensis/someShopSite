@@ -12,4 +12,3 @@ class AccountCreationForm(UserCreationForm):
 class AccountLoginForm(AuthenticationForm):
     class Meta:
         model = Account
-        fields = ("email",)
