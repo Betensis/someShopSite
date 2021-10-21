@@ -14,7 +14,7 @@ class IndexView(TemplateView):
         return context
 
 
-def test(request, main_category_slug):
+def main_category_view(request, main_category_slug):
     main_category = MainCategory.objects.get(slug=main_category_slug)
     items = get_items_by_main_category(main_category)
     return render(
