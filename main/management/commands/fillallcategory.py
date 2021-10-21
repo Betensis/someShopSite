@@ -4,7 +4,7 @@ from django.db import IntegrityError
 
 from main.models import MainCategory, Subcategory
 
-default_categories: dict[MainCategory : list[Subcategory]] = {
+default_categories: dict[MainCategory: list[Subcategory]] = {
     MainCategory(title="Головные уборы", slug="hat", pk=1): [
         Subcategory(title="Кепки", slug="cap"),
         Subcategory(title="Банданы", slug="bandana"),
