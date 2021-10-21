@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from autoslug.utils import slugify
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand
-from django.db import IntegrityError
 
-from main.models import MainCategory, Subcategory
+from main.models import MainCategory, Subcategory, Shoes, Hat, OuterWear, Item
 
 
 @dataclass(frozen=True)
@@ -13,26 +13,56 @@ class Categories:
     subcategories: list[Subcategory]
 
 
+def get_content_model_type_by_model(model):
+    return ContentType.objects.get_for_model(model=model)
+
+
+content_type_by_model = {
+    "Hat": get_content_model_type_by_model(Hat),
+    "Shoes": get_content_model_type_by_model(Shoes),
+    "Outerwear": get_content_model_type_by_model(OuterWear),
+}
+
 default_categories: list[Categories] = [
     Categories(
         MainCategory(title="Головные уборы", slug="hat"),
         [
-            Subcategory(title="Кепки", slug="cap"),
-            Subcategory(title="Банданы", slug="bandana"),
+            Subcategory(
+                title="Кепки", slug="cap", item_model=content_type_by_model["Hat"]
+            ),
+            Subcategory(
+                title="Банданы", slug="bandana", item_model=content_type_by_model["Hat"]
+            ),
         ],
     ),
     Categories(
         MainCategory(title="Обувь", slug="shoes"),
         [
-            Subcategory(title="Кроссовки", slug="sneakers"),
-            Subcategory(title="Сандали", slug="sandals"),
+            Subcategory(
+                title="Кроссовки",
+                slug="sneakers",
+                item_model=content_type_by_model["Shoes"],
+            ),
+            Subcategory(
+                title="Сандали",
+                slug="sandals",
+                item_model=content_type_by_model["Shoes"],
+            ),
         ],
     ),
     Categories(
         MainCategory(title="Верхняя одежда", slug="outerwear"),
         [
-            Subcategory(title="Куртки", slug="jacket"),
-            Subcategory(title="Футболки", slug="t-shirt"),
+            Subcategory(
+                title="Куртки",
+                slug="jacket",
+                item_model=content_type_by_model["Outerwear"],
+            ),
+            Subcategory(
+                title="Футболки",
+                slug="t-shirt",
+                item_model=content_type_by_model["Outerwear"],
+            ),
         ],
     ),
 ]
@@ -44,12 +74,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for category in default_categories:
             try:
-                category.main_category.save()
-            except IntegrityError:
+                category.main_category.validate_unique()
+            except ValidationError:
                 pass
+            else:
+                category.main_category.save()
             for subcategory in category.subcategories:
                 subcategory.main_category = category.main_category
                 try:
-                    subcategory.save()
-                except IntegrityError:
-                    pass
+                    subcategory.validate_unique()
+                except ValidationError:
+                    continue
+                subcategory.save()
+
