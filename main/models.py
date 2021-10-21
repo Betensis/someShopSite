@@ -53,6 +53,7 @@ class Subcategory(models.Model):
         unique_with="title",
         editable=True,
     )
+    item_model = models.ForeignKey(ContentType, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -134,6 +135,10 @@ class Hat(Item):
         verbose_name_plural = _("головные уборы")
 
 
+class OuterWear(Item):
+    pass
+
+
 class OrderItem(models.Model):
     customer = models.ForeignKey(
         User,
@@ -162,9 +167,9 @@ class Order(models.Model):
     ordered = models.BooleanField()
 
     def __str__(self):
-        return f"{self.customer.username}: " + ", ".join(
+        return f"{self.customer.email}: " + ", ".join(
             map(
-                lambda item: item.get_content_type_repr() + str(item.object_id),
+                lambda item: item.get_content_type_repr() + f" id:{item.object_id}",
                 self.items.all()[:3],
             )
         )
