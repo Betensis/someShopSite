@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import MainCategory, Subcategory, Shoes, Brand, Hat, OrderItem, Order
+from .models import MainCategory, Subcategory, Shoes, Brand, Hat, OrderProduct, Order
 
 
 @admin.register(MainCategory)
@@ -51,14 +51,14 @@ class BrandAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(OrderItem)
-class OrderItemAdmin(admin.ModelAdmin):
+@admin.register(OrderProduct)
+class OrderProductAdmin(admin.ModelAdmin):
     list_display = [
         "customer",
-        "ordered",
         "content_type",
         "object_id",
         "content_object",
+        'order'
     ]
 
 
@@ -66,16 +66,7 @@ class OrderItemAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "customer",
-        "get_items",
+        "products",
         "ordered_date",
         "ordered",
     ]
-
-    @admin.display(description="items")
-    def get_items(self, obj):
-        return ", ".join(
-            [
-                f"{item.get_content_type_repr()} id:{item.object_id}"
-                for item in obj.items.all()
-            ]
-        )

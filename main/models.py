@@ -81,7 +81,7 @@ class Brand(models.Model):
         return self.title
 
 
-class Item(models.Model):
+class Product(models.Model):
     class Meta:
         abstract = True
 
@@ -123,32 +123,36 @@ class Item(models.Model):
         return self.title
 
 
-class Shoes(Item):
+class Shoes(Product):
     class Meta:
         verbose_name = _("обувь")
         verbose_name_plural = _("обувь")
 
 
-class Hat(Item):
+class Hat(Product):
     class Meta:
         verbose_name = _("головной убор")
         verbose_name_plural = _("головные уборы")
 
 
-class OuterWear(Item):
+class OuterWear(Product):
     pass
 
 
-class OrderItem(models.Model):
+class OrderProduct(models.Model):
     customer = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
     )
-    ordered = models.BooleanField(default=False)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey("content_type", "object_id")
     quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
+    order = models.ForeignKey(
+        'Order',
+        on_delete=models.CASCADE,
+        related_name='products',
+    )
 
     def get_content_type_repr(self):
         return str(self.content_type).split("|")[1]
@@ -162,7 +166,6 @@ class Order(models.Model):
         User,
         models.CASCADE,
     )
-    items = models.ManyToManyField(OrderItem)
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField()
 
@@ -170,6 +173,6 @@ class Order(models.Model):
         return f"{self.customer.email}: " + ", ".join(
             map(
                 lambda item: item.get_content_type_repr() + f" id:{item.object_id}",
-                self.items.all()[:3],
+                self.products.all()[:3],
             )
         )
