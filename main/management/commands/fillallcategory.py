@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand
 
-from main.models import MainCategory, Subcategory, Shoes, Hat, OuterWear, Item
+from main.models import MainCategory, Subcategory, Shoes, Hat, OuterWear
 
 
 @dataclass(frozen=True)

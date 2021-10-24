@@ -1,4 +1,4 @@
-from django.contrib.auth import login as auth_login, authenticate
+from django.contrib.auth import login as auth_login
 from django.contrib.auth.views import LoginView
 from django.views.generic import FormView
 
