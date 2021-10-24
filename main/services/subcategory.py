@@ -1,10 +1,10 @@
 from django.db.models import QuerySet
 
 from main.models import MainCategory, Subcategory
-from main.services.base import BaseService
+from main.services.base import BaseModelService
 
 
-class SubcategoryService(BaseService):
+class SubcategoryService(BaseModelService):
     model = Subcategory
 
     @classmethod

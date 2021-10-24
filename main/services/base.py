@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import QuerySet
 
 
-class BaseService:
+class BaseModelService:
     model: models.Model = None
 
     @classmethod

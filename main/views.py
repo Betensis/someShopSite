@@ -3,7 +3,7 @@ from django.views.defaults import page_not_found
 from django.views.generic import TemplateView, ListView
 
 from .models import MainCategory, Subcategory
-from .services.main_category import MainCategoryService
+from .services.main_category import MainCategoryModelService
 
 
 class IndexView(TemplateView):
@@ -23,7 +23,7 @@ class MainCategoryView(ListView):
         main_category = get_object_or_404(
             MainCategory, slug=self.kwargs["main_category_slug"]
         )
-        return MainCategoryService.get_items_by_main_category(main_category)
+        return MainCategoryModelService.get_items_by_main_category(main_category)
 
 
 class SubcategoryView(ListView):

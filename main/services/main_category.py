@@ -1,9 +1,9 @@
 from main.models import MainCategory
-from main.services.base import BaseService
+from main.services.base import BaseModelService
 from . import subcategory as subcategory_service
 
 
-class MainCategoryService(BaseService):
+class MainCategoryService(BaseModelService):
     model = MainCategory
 
     @classmethod
