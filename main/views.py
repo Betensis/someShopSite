@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView, ListView
 
 from .models import MainCategory
 from .services import get_items_by_main_category
@@ -14,9 +14,10 @@ class IndexView(TemplateView):
         return context
 
 
-def main_category_view(request, main_category_slug):
-    main_category = MainCategory.objects.get(slug=main_category_slug)
-    items = get_items_by_main_category(main_category)
-    return render(
-        request, "main/main_category.html", context={'items': items}
-    )
+class MainCategoryView(ListView):
+    template_name = 'main/main_category.html'
+    context_object_name = 'items'
+
+    def get_queryset(self):
+        main_category = get_object_or_404(MainCategory, slug=self.kwargs['main_category_slug'])
+        return get_items_by_main_category(main_category)

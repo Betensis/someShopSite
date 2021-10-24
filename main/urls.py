@@ -1,4 +1,3 @@
-from django.conf.urls import include
 from django.conf.urls.static import static
 from django.urls import path
 
@@ -9,6 +8,5 @@ app_name = "main"
 
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
-    path("main-category/<slug:main_category_slug>", views.main_category_view),
-    # path("category/<slug:category>", ),
+    path("main-category/<slug:main_category_slug>", views.MainCategoryView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
