@@ -8,5 +8,7 @@ class SubcategoryService(BaseService):
     model = Subcategory
 
     @classmethod
-    def get_subcategories_by_main_category(cls, main_category: MainCategory) -> QuerySet[Subcategory]:
+    def get_subcategories_by_main_category(
+        cls, main_category: MainCategory
+    ) -> QuerySet[Subcategory]:
         return cls.filter(main_category=main_category)

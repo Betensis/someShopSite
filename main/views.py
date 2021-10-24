@@ -16,20 +16,24 @@ class IndexView(TemplateView):
 
 
 class MainCategoryView(ListView):
-    template_name = 'main/main_category.html'
-    context_object_name = 'items'
+    template_name = "main/main_category.html"
+    context_object_name = "items"
 
     def get_queryset(self):
-        main_category = get_object_or_404(MainCategory, slug=self.kwargs['main_category_slug'])
+        main_category = get_object_or_404(
+            MainCategory, slug=self.kwargs["main_category_slug"]
+        )
         return MainCategoryService.get_items_by_main_category(main_category)
 
 
 class SubcategoryView(ListView):
-    template_name = 'main/subcategory.html'
-    context_object_name = 'items'
+    template_name = "main/subcategory.html"
+    context_object_name = "items"
 
     def get_queryset(self):
-        subcategory = get_object_or_404(Subcategory, slug=self.kwargs['subcategory_slug'])
+        subcategory = get_object_or_404(
+            Subcategory, slug=self.kwargs["subcategory_slug"]
+        )
         ItemClass = subcategory.item_model.model_class()
         if not ItemClass:
             return page_not_found(self.request)

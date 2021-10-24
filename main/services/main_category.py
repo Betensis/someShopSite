@@ -8,6 +8,10 @@ class MainCategoryService(BaseService):
 
     @classmethod
     def get_items_by_main_category(cls, main_category: MainCategory):
-        subcategory = subcategory_service.SubcategoryService.get_subcategories_by_main_category(main_category).first()
+        subcategory = (
+            subcategory_service.SubcategoryService.get_subcategories_by_main_category(
+                main_category
+            ).first()
+        )
         item_model = subcategory.item_model.model_class()
         return item_model.objects.all()

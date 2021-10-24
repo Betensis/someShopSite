@@ -86,4 +86,3 @@ class Command(BaseCommand):
                 except ValidationError:
                     continue
                 subcategory.save()
-
