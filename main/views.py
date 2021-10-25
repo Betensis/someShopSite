@@ -1,9 +1,7 @@
-from django.shortcuts import get_object_or_404
-from django.views.defaults import page_not_found
 from django.views.generic import TemplateView, ListView
 
-from .models import MainCategory, Subcategory
-from .services.main_category import MainCategoryModelService
+from .services.main_category import MainCategoryService
+from .services.subcategory import SubcategoryService
 
 
 class IndexView(TemplateView):
@@ -20,10 +18,8 @@ class MainCategoryView(ListView):
     context_object_name = "items"
 
     def get_queryset(self):
-        main_category = get_object_or_404(
-            MainCategory, slug=self.kwargs["main_category_slug"]
-        )
-        return MainCategoryModelService.get_items_by_main_category(main_category)
+        main_category = MainCategoryService.get_object_or_404(slug=self.kwargs["main_category_slug"],)
+        return MainCategoryService.get_products_by_main_category(main_category)
 
 
 class SubcategoryView(ListView):
@@ -31,10 +27,5 @@ class SubcategoryView(ListView):
     context_object_name = "items"
 
     def get_queryset(self):
-        subcategory = get_object_or_404(
-            Subcategory, slug=self.kwargs["subcategory_slug"]
-        )
-        ItemClass = subcategory.item_model.model_class()
-        if not ItemClass:
-            return page_not_found(self.request)
-        return ItemClass.objects.filter(category=subcategory)
+        subcategory = SubcategoryService.get_object_or_404(slug=self.kwargs['subcategory_slug'])
+        return SubcategoryService.get_products_by_subcategory(subcategory)
