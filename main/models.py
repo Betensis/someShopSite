@@ -53,7 +53,7 @@ class Subcategory(models.Model):
         unique_with="title",
         editable=True,
     )
-    item_model = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    product_model = models.ForeignKey(ContentType, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

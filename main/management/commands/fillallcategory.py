@@ -28,10 +28,10 @@ default_categories: list[Categories] = [
         MainCategory(title="Головные уборы", slug="hat"),
         [
             Subcategory(
-                title="Кепки", slug="cap", item_model=content_type_by_model["Hat"]
+                title="Кепки", slug="cap", product_model=content_type_by_model["Hat"]
             ),
             Subcategory(
-                title="Банданы", slug="bandana", item_model=content_type_by_model["Hat"]
+                title="Банданы", slug="bandana", product_model=content_type_by_model["Hat"]
             ),
         ],
     ),
@@ -41,12 +41,12 @@ default_categories: list[Categories] = [
             Subcategory(
                 title="Кроссовки",
                 slug="sneakers",
-                item_model=content_type_by_model["Shoes"],
+                product_model=content_type_by_model["Shoes"],
             ),
             Subcategory(
                 title="Сандали",
                 slug="sandals",
-                item_model=content_type_by_model["Shoes"],
+                product_model=content_type_by_model["Shoes"],
             ),
         ],
     ),
@@ -56,12 +56,12 @@ default_categories: list[Categories] = [
             Subcategory(
                 title="Куртки",
                 slug="jacket",
-                item_model=content_type_by_model["Outerwear"],
+                product_model=content_type_by_model["Outerwear"],
             ),
             Subcategory(
                 title="Футболки",
                 slug="t-shirt",
-                item_model=content_type_by_model["Outerwear"],
+                product_model=content_type_by_model["Outerwear"],
             ),
         ],
     ),
