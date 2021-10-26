@@ -58,7 +58,7 @@ class OrderProductAdmin(admin.ModelAdmin):
         "content_type",
         "object_id",
         "content_object",
-        'order'
+        "order",
     ]
 
 

@@ -9,7 +9,9 @@ class MainCategoryService(BaseModelService):
     model = MainCategory
 
     @classmethod
-    def get_products_by_main_category(cls, main_category: MainCategory) -> QuerySet[MainCategory]:
+    def get_products_by_main_category(
+        cls, main_category: MainCategory
+    ) -> QuerySet[MainCategory]:
         subcategory = (
             subcategory_service.SubcategoryService.get_subcategories_by_main_category(
                 main_category

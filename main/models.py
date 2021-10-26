@@ -149,9 +149,9 @@ class OrderProduct(models.Model):
     content_object = GenericForeignKey("content_type", "object_id")
     quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
     order = models.ForeignKey(
-        'Order',
+        "Order",
         on_delete=models.CASCADE,
-        related_name='products',
+        related_name="products",
     )
 
     def get_content_type_repr(self):

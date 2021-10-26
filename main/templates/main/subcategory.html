@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
 {% block body %}
-    {{ items }}
+    {% for product in products %}
+        <p>{{ product.title }}</p>
+        <img src="{{ product.image.url }}" height="250" width="500" alt="">
+    {% endfor %}
 {% endblock %}

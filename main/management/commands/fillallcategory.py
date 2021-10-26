@@ -31,7 +31,9 @@ default_categories: list[Categories] = [
                 title="Кепки", slug="cap", product_model=content_type_by_model["Hat"]
             ),
             Subcategory(
-                title="Банданы", slug="bandana", product_model=content_type_by_model["Hat"]
+                title="Банданы",
+                slug="bandana",
+                product_model=content_type_by_model["Hat"],
             ),
         ],
     ),
