@@ -32,3 +32,7 @@ class BaseModelService(BaseService):
     @classmethod
     def get_object_or_404(cls, *args, **kwargs):
         return get_object_or_404(cls.model, *args, **kwargs)
+
+    @classmethod
+    def create(cls, *args, **kwargs):
+        return cls.model.objects.create(*args, **kwargs)
