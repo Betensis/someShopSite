@@ -135,7 +135,7 @@ class Hat(Product):
         verbose_name_plural = _("головные уборы")
 
 
-class OuterWear(Product):
+class Outerwear(Product):
     pass
 
 
