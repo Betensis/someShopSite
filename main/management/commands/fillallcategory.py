@@ -1,10 +1,13 @@
 from dataclasses import dataclass
+from typing import Type
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand
+from django.db.models import Model
 
-from main.models import MainCategory, Subcategory, Shoes, Hat, OuterWear
+from main.models import MainCategory, Subcategory
+from main.utils.product import get_product_sub_models
 
 
 @dataclass(frozen=True)
@@ -13,15 +16,15 @@ class Categories:
     subcategories: list[Subcategory]
 
 
-def get_content_model_type_by_model(model):
+def get_content_model_type_by_model(model: Type[Model]):
     return ContentType.objects.get_for_model(model=model)
 
 
-content_type_by_model = {
-    "Hat": get_content_model_type_by_model(Hat),
-    "Shoes": get_content_model_type_by_model(Shoes),
-    "Outerwear": get_content_model_type_by_model(OuterWear),
-}
+content_models = get_product_sub_models()
+content_type_by_model = dict(map(
+    lambda x: (x[0], get_content_model_type_by_model(x[1]))
+    , content_models.items()
+))
 
 default_categories: list[Categories] = [
     Categories(
