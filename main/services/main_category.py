@@ -17,5 +17,5 @@ class MainCategoryService(BaseModelService):
                 main_category
             ).first()
         )
-        item_model = subcategory.product_model.model_class()
+        item_model = subcategory.product_content_type.model_class()
         return item_model.objects.all()

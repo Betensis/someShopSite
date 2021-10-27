@@ -1,13 +1,10 @@
 from dataclasses import dataclass
-from typing import Type
 
-from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand
-from django.db.models import Model
 
 from main.models import MainCategory, Subcategory
-from main.utils.product import get_product_sub_models
+from main.utils.product import get_product_sub_model_content_types
 
 
 @dataclass(frozen=True)
@@ -16,27 +13,21 @@ class Categories:
     subcategories: list[Subcategory]
 
 
-def get_content_model_type_by_model(model: Type[Model]):
-    return ContentType.objects.get_for_model(model=model)
-
-
-content_models = get_product_sub_models()
-content_type_by_model = dict(map(
-    lambda x: (x[0], get_content_model_type_by_model(x[1]))
-    , content_models.items()
-))
+content_type_by_model = get_product_sub_model_content_types()
 
 default_categories: list[Categories] = [
     Categories(
         MainCategory(title="Головные уборы", slug="hat"),
         [
             Subcategory(
-                title="Кепки", slug="cap", product_model=content_type_by_model["Hat"]
+                title="Кепки",
+                slug="cap",
+                product_content_type=content_type_by_model["Hat"],
             ),
             Subcategory(
                 title="Банданы",
                 slug="bandana",
-                product_model=content_type_by_model["Hat"],
+                product_content_type=content_type_by_model["Hat"],
             ),
         ],
     ),
@@ -46,12 +37,12 @@ default_categories: list[Categories] = [
             Subcategory(
                 title="Кроссовки",
                 slug="sneakers",
-                product_model=content_type_by_model["Shoes"],
+                product_content_type=content_type_by_model["Shoes"],
             ),
             Subcategory(
                 title="Сандали",
                 slug="sandals",
-                product_model=content_type_by_model["Shoes"],
+                product_content_type=content_type_by_model["Shoes"],
             ),
         ],
     ),
@@ -61,12 +52,12 @@ default_categories: list[Categories] = [
             Subcategory(
                 title="Куртки",
                 slug="jacket",
-                product_model=content_type_by_model["Outerwear"],
+                product_content_type=content_type_by_model["Outerwear"],
             ),
             Subcategory(
                 title="Футболки",
                 slug="t-shirt",
-                product_model=content_type_by_model["Outerwear"],
+                product_content_type=content_type_by_model["Outerwear"],
             ),
         ],
     ),

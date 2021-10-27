@@ -53,7 +53,7 @@ class Subcategory(models.Model):
         unique_with="title",
         editable=True,
     )
-    product_model = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    product_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -104,9 +104,7 @@ class Product(models.Model):
         models.CASCADE,
         verbose_name=_("категория"),
     )
-    image = models.ImageField(
-        _("фотокарточка"),
-    )
+    image = models.ImageField(_("фотокарточка"), null=True)
     slug = AutoSlugField(
         populate_from="title",
         unique=True,
