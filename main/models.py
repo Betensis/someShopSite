@@ -104,7 +104,10 @@ class Product(models.Model):
         models.CASCADE,
         verbose_name=_("категория"),
     )
-    image = models.ImageField(_("фотокарточка"), null=True)
+    image = models.ImageField(
+        _("фотокарточка"),
+        null=True,
+    )
     slug = AutoSlugField(
         populate_from="title",
         unique=True,
