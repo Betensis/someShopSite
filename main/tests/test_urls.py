@@ -4,10 +4,13 @@ from http import HTTPStatus
 
 from django.urls import reverse
 
-from main.models import Hat, Brand
+from main.models import Hat, Brand, Subcategory, Product
 from main.services.main_category import MainCategoryService
 from main.services.subcategory import SubcategoryService
-from main.utils.product import get_product_sub_model_content_types
+from main.utils.product import (
+    get_product_sub_model_content_types,
+    get_product_sub_models,
+)
 
 User = get_user_model()
 
@@ -20,7 +23,7 @@ class IndexURLTest(TestCase):
             email="test@gmail.com",
         )
 
-    def setUp(self) -> None:
+    def setUp(self):
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
@@ -49,7 +52,7 @@ class CategoryURLTest(TestCase):
             product_content_type=get_product_sub_model_content_types()["Hat"],
         )
 
-    def setUp(self) -> None:
+    def setUp(self):
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
@@ -82,3 +85,58 @@ class CategoryURLTest(TestCase):
             with self.subTest():
                 response = client.get(subcategory_path)
                 self.assertEqual(response.status_code, expected_status)
+
+
+class ProductDetailURLTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(
+            username="test user", email="emailtest@test.com"
+        )
+        cls.main_category = MainCategoryService.create(title="main category test")
+        cls.brand = Brand.objects.create(title="Nike!!!!")
+
+        def create_subcategory_by_model(model_name: str) -> tuple[Subcategory, Product]:
+            subcategory = SubcategoryService.create(
+                title=f"subcategory {model_name} title",
+                main_category=cls.main_category,
+                product_content_type=get_product_sub_model_content_types()[model_name],
+            )
+            obj = get_product_sub_models()[model_name].objects.create(
+                title=f"{model_name}: {cls.brand} title",
+                price=123,
+                category=subcategory,
+                description=f"very very very long {model_name} desc",
+                brand=cls.brand,
+            )
+            return subcategory, obj
+
+        cls.product_by_subcategory = dict(
+            [
+                create_subcategory_by_model("Hat"),
+                create_subcategory_by_model("Outerwear"),
+                create_subcategory_by_model("Shoes"),
+            ]
+        )
+
+    def setUp(self):
+        self.authorized_client = Client()
+        self.authorized_client.force_login(self.user)
+
+        self.not_authorized_client = Client()
+
+    def test_product_detail_url(self):
+        expected_status = HTTPStatus.OK.value
+
+        for client in self.not_authorized_client, self.authorized_client:
+            for subcategory, product in self.product_by_subcategory.items():
+                with self.subTest(subcategory=subcategory, product=product):
+                    product_detail_path = reverse(
+                        "main:product-detail",
+                        kwargs={
+                            "subcategory_slug": subcategory.slug,
+                            "pk": product.pk,
+                        },
+                    )
+                    response = client.get(product_detail_path)
+                    self.assertEqual(response.status_code, expected_status)
