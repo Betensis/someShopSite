@@ -1,33 +1,50 @@
 from django.test import TestCase
 
-from main.models import MainCategory, Subcategory, Outerwear, Brand
+from main.models import Outerwear, Hat, Subcategory
 from main.services.main_category import MainCategoryService
-from main.utils.product import get_product_sub_model_content_types
+from main.services.subcategory import SubcategoryService
+from main.utils import test as test_utils
 
 
 class MainCategoryServiceTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.main_category = MainCategory.objects.create(title="main category!")
-        cls.subcategory = Subcategory.objects.create(
-            title="subcategory title",
-            main_category=cls.main_category,
-            product_content_type=get_product_sub_model_content_types()["Outerwear"],
+        cls.outerwears: list[Outerwear] = test_utils.create_products(
+            Outerwear,
+            amount=10,
         )
-        cls.brand = Brand.objects.create(title="NIKEEEEEEeee")
-
-        cls.outerwears: list[Outerwear] = []
-        for index in range(4):
-            cls.outerwears.append(
-                Outerwear.objects.create(
-                    title=f"outerwear {index}",
-                    description=f"long desc {index}",
-                    price=213 + index * 10,
-                    category=cls.subcategory,
-                    brand=cls.brand,
-                )
-            )
 
     def test_get_products_by_main_category(self):
-        products = MainCategoryService.get_products_by_main_category(self.main_category)
+        main_category = self.outerwears[0].category.main_category
+        products = MainCategoryService.get_products_by_main_category(main_category)
         self.assertListEqual([*products], self.outerwears)
+
+
+class SubcategoryServiceTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.main_category = test_utils.create_main_category()
+        cls.subcategory_with_hats = test_utils.create_subcategory(
+            cls.main_category, Hat
+        )
+        cls.hats = test_utils.create_products(
+            Hat,
+            amount=15,
+            category=cls.subcategory_with_hats,
+        )
+        # Добавил таким образом, т.к. должен сохраняться порядок создания подкатегорий
+        cls.subcategories = [cls.subcategory_with_hats] + [
+            test_utils.create_subcategory(cls.main_category, Hat) for _ in range(3)
+        ]
+
+    def test_get_subcategories_by_main_category(self):
+        subcategories = SubcategoryService.get_subcategories_by_main_category(
+            self.main_category
+        )
+        self.assertListEqual([*subcategories], self.subcategories)
+
+    def test_get_products_by_subcategory(self):
+        products = SubcategoryService.get_products_by_subcategory(
+            self.subcategory_with_hats
+        )
+        self.assertListEqual([*products], self.hats)
