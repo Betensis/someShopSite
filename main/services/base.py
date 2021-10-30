@@ -36,3 +36,11 @@ class BaseModelService(BaseService):
     @classmethod
     def create(cls, *args, **kwargs):
         return cls.model.objects.create(*args, **kwargs)
+
+    @classmethod
+    def get_or_none(cls, *args, **kwargs):
+        try:
+            instance = cls.model.objects.get()
+        except cls.model.DoesNotExist:
+            return None
+        return instance
