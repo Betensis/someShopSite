@@ -40,7 +40,7 @@ class BaseModelService(BaseService):
     @classmethod
     def get_or_none(cls, *args, **kwargs):
         try:
-            instance = cls.model.objects.get()
+            instance = cls.model.objects.get(*args, **kwargs)
         except cls.model.DoesNotExist:
             return None
         return instance
