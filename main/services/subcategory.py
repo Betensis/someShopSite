@@ -20,7 +20,9 @@ class SubcategoryService(BaseModelService):
     def get_products_by_subcategory(
         cls, subcategory: Subcategory
     ) -> Optional[QuerySet[Product]]:
-        subcategory = cls.get_object_or_404(slug=subcategory.slug)
+        subcategory = cls.get_or_none(slug=subcategory.slug)
+        if subcategory is None:
+            return None
         ItemClass: models.Model = subcategory.product_content_type.model_class()
         if ItemClass is None:
             return None
