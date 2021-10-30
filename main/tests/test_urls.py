@@ -14,6 +14,8 @@ from main.utils.product import (
 
 User = get_user_model()
 
+error_expected_status_msg = "Неверный статус ответа на пути {}"
+
 
 class IndexURLTest(TestCase):
     @classmethod
@@ -36,7 +38,11 @@ class IndexURLTest(TestCase):
         for client in self.not_authorized_client, self.authorized_client:
             with self.subTest(client=client):
                 response = self.client.get(index_path)
-                self.assertEqual(response.status_code, expected_status_code)
+                self.assertEqual(
+                    response.status_code,
+                    expected_status_code,
+                    error_expected_status_msg.format(index_path),
+                )
 
 
 class CategoryURLTest(TestCase):
@@ -70,7 +76,11 @@ class CategoryURLTest(TestCase):
         for client in self.not_authorized_client, self.authorized_client:
             with self.subTest():
                 response = client.get(main_category_path)
-                self.assertEqual(response.status_code, expected_status)
+                self.assertEqual(
+                    response.status_code,
+                    expected_status,
+                    error_expected_status_msg.format(main_category_path),
+                )
 
     def test_subcategory_url(self):
         subcategory_path = reverse(
@@ -84,7 +94,11 @@ class CategoryURLTest(TestCase):
         for client in self.not_authorized_client, self.authorized_client:
             with self.subTest():
                 response = client.get(subcategory_path)
-                self.assertEqual(response.status_code, expected_status)
+                self.assertEqual(
+                    response.status_code,
+                    expected_status,
+                    error_expected_status_msg.format(subcategory_path),
+                )
 
 
 class ProductDetailURLTest(TestCase):
@@ -139,4 +153,8 @@ class ProductDetailURLTest(TestCase):
                         },
                     )
                     response = client.get(product_detail_path)
-                    self.assertEqual(response.status_code, expected_status)
+                    self.assertEqual(
+                        response.status_code,
+                        expected_status,
+                        error_expected_status_msg.format(product_detail_path),
+                    )
