@@ -1,13 +1,13 @@
 from django.core.management import BaseCommand, call_command
 
 fill_db_commands = [
-    'fill_all_category',
-    'fill_brands',
+    "fill_all_category",
+    "fill_brands",
 ]
 
 
 class Command(BaseCommand):
-    help = 'recreate db and fill categories and brands'
+    help = "recreate db and fill categories and brands"
 
     def handle(self, *args, **options):
         call_command("recreatedb")
