@@ -1,8 +1,8 @@
 from django.core.management import BaseCommand, call_command
 
 fill_db_commands = [
-    "fill_all_category",
-    "fill_brands",
+    'fillallcategory',
+    'fillbrands',
 ]
 
 
