@@ -3,11 +3,13 @@ from django.views.generic import TemplateView, ListView, DetailView
 
 from .services.main_category import MainCategoryService
 from .services.subcategory import SubcategoryService
+from .utils.view import send_user_context
 
 
 class IndexView(TemplateView):
     template_name = "main/index.html"
 
+    @send_user_context
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Titanic"
@@ -24,6 +26,10 @@ class MainCategoryView(ListView):
         )
         return MainCategoryService.get_products_by_main_category(main_category)
 
+    @send_user_context
+    def get_context_data(self, *, object_list=None, **kwargs):
+        return super().get_context_data(object_list=object_list, **kwargs)
+
 
 class SubcategoryView(ListView):
     template_name = "main/subcategory.html"
@@ -38,6 +44,10 @@ class SubcategoryView(ListView):
             return page_not_found(self.request)
         return products
 
+    @send_user_context
+    def get_context_data(self, *, object_list=None, **kwargs):
+        return super().get_context_data(object_list=object_list, **kwargs)
+
 
 class ProductDetailView(DetailView):
     template_name = "main/product_detail.html"
@@ -51,3 +61,7 @@ class ProductDetailView(DetailView):
         if products is None:
             return page_not_found(self.request)
         return products
+
+    @send_user_context
+    def get_context_data(self, *, object_list=None, **kwargs):
+        return super().get_context_data(object_list=object_list, **kwargs)
