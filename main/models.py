@@ -86,9 +86,9 @@ class Product(models.Model):
         abstract = True
 
     class SexChoice(models.TextChoices):
-        MALE = _('male')
-        FEMALE = _('female')
-        UNISEX = _('unisex')
+        MALE = _("male")
+        FEMALE = _("female")
+        UNISEX = _("unisex")
 
     title = models.CharField(
         verbose_name=_("название"),
@@ -125,12 +125,12 @@ class Product(models.Model):
         verbose_name=_("бренд"),
     )
     sex = models.CharField(
-        verbose_name=_('пол'),
+        verbose_name=_("пол"),
         max_length=7,
         choices=SexChoice.choices,
     )
     is_for_kids = models.BooleanField(
-        verbose_name=_('для детей'),
+        verbose_name=_("для детей"),
         default=False,
     )
 

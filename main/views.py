@@ -2,6 +2,7 @@ from django.views.defaults import page_not_found
 from django.views.generic import TemplateView, ListView, DetailView
 
 from .services.main_category import MainCategoryService
+from .services.product import ProductService
 from .services.subcategory import SubcategoryService
 from .utils.view import send_user_context
 
@@ -65,3 +66,11 @@ class ProductDetailView(DetailView):
     @send_user_context
     def get_context_data(self, *, object_list=None, **kwargs):
         return super().get_context_data(object_list=object_list, **kwargs)
+
+
+class KidsView(ListView):
+    template_name = "main/kids.html"
+    context_object_name = "products"
+
+    def get_queryset(self):
+        return ProductService.get_all_products(for_kids=True)
