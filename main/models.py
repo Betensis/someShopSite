@@ -85,6 +85,11 @@ class Product(models.Model):
     class Meta:
         abstract = True
 
+    class SexChoice(models.TextChoices):
+        MALE = _('male')
+        FEMALE = _('female')
+        UNISEX = _('unisex')
+
     title = models.CharField(
         verbose_name=_("название"),
         max_length=150,
@@ -118,6 +123,11 @@ class Product(models.Model):
         Brand,
         models.CASCADE,
         verbose_name=_("бренд"),
+    )
+    sex = models.CharField(
+        verbose_name=_('пол'),
+        max_length=7,
+        choices=SexChoice.choices,
     )
 
     def __str__(self):
