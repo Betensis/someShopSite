@@ -1,16 +1,22 @@
+import time
 from string import ascii_letters
 from random import choice
 from typing import Type, TypeVar
+
+from django.contrib.auth import get_user_model
 
 from main.models import Brand, MainCategory, Subcategory, Product
 from main.utils.content_type import get_content_model_type_by_model
 
 
 T = TypeVar("T")
+User = get_user_model()
 
 
 def get_rand_str(length: int = 10, symbols: str = ascii_letters) -> str:
-    return "".join([choice(symbols) for i in range(length)])
+    pepper = str(time.time())
+    rand_str = "".join([choice(symbols) for i in range(length)])
+    return (rand_str + pepper)[:length]
 
 
 def create_brand() -> Brand:
@@ -56,3 +62,9 @@ def _create_product(product_model: Type[Product], **product_kwargs):
     product_kwargs.setdefault("price", 150)
     product_kwargs.setdefault("brand", create_brand())
     return product_model.objects.create(**product_kwargs)
+
+
+def create_user(**user_kwargs):
+    user_kwargs.setdefault("username", get_rand_str())
+    user_kwargs.setdefault("email", get_rand_str() + "@mail.com")
+    return User.objects.create_user(**user_kwargs)
