@@ -4,13 +4,14 @@ from http import HTTPStatus
 
 from django.urls import reverse
 
-from main.models import Hat, Brand, Subcategory, Product
+from main.models import Hat, Subcategory, Product, Outerwear, Shoes
 from main.services.main_category import MainCategoryService
 from main.services.subcategory import SubcategoryService
 from main.utils.product import (
     get_product_sub_model_content_types,
     get_product_sub_models,
 )
+from main.utils import test as test_utils
 
 User = get_user_model()
 
@@ -20,10 +21,7 @@ error_expected_status_msg = "Неверный статус ответа на п�
 class IndexURLTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user(
-            username="username1",
-            email="test@gmail.com",
-        )
+        cls.user = test_utils.create_user()
 
     def setUp(self):
         self.authorized_client = Client()
@@ -48,14 +46,11 @@ class IndexURLTest(TestCase):
 class CategoryURLTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user(
-            username="test user", email="emailtest@test.com"
-        )
-        cls.main_category = MainCategoryService.create(title="main category test")
-        cls.subcategory = SubcategoryService.create(
-            title="subcategory title",
-            main_category=cls.main_category,
-            product_content_type=get_product_sub_model_content_types()["Hat"],
+        cls.user = test_utils.create_user()
+        cls.main_category = test_utils.create_main_category()
+        cls.subcategory = test_utils.create_subcategory(
+            cls.main_category,
+            Hat
         )
 
     def setUp(self):
@@ -104,11 +99,11 @@ class CategoryURLTest(TestCase):
 class ProductDetailURLTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user(
-            username="test user", email="emailtest@test.com"
-        )
-        cls.main_category = MainCategoryService.create(title="main category test")
-        cls.brand = Brand.objects.create(title="Nike!!!!")
+        cls.user = test_utils.create_user()
+        cls.main_category = test_utils.create_main_category()
+        cls.brand = test_utils.create_brand()
+
+        product_models = (Hat, Outerwear, Shoes)
 
         def create_subcategory_by_model(model_name: str) -> tuple[Subcategory, Product]:
             subcategory = SubcategoryService.create(
@@ -125,12 +120,22 @@ class ProductDetailURLTest(TestCase):
             )
             return subcategory, obj
 
+        cls.subcategories = [
+            test_utils.create_subcategory(cls.main_category, product_model)
+            for product_model in product_models
+        ]
+
+        cls.products = [
+            test_utils.create_products(
+                product_model,
+                amount=1,
+                category=cls.subcategories[index]
+            )[0]
+            for index, product_model in enumerate(product_models)
+        ]
+
         cls.product_by_subcategory = dict(
-            [
-                create_subcategory_by_model("Hat"),
-                create_subcategory_by_model("Outerwear"),
-                create_subcategory_by_model("Shoes"),
-            ]
+            zip(cls.subcategories, cls.products)
         )
 
     def setUp(self):
