@@ -163,3 +163,28 @@ class ProductDetailURLTest(TestCase):
                         expected_status,
                         error_expected_status_msg.format(product_detail_path),
                     )
+
+
+class KidsURLTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = test_utils.create_user()
+
+    def setUp(self) -> None:
+        self.authorized_client = Client()
+        self.authorized_client.force_login(self.user)
+
+        self.not_authorized_client = Client()
+
+    def test_kids_url(self):
+        expected_status = HTTPStatus.OK.value
+        kids_path = reverse(
+                        'main:kids'
+                    )
+
+        for client in self.authorized_client, self.not_authorized_client:
+            with self.subTest():
+                response = client.get(
+                    kids_path
+                )
+                self.assertEqual(response.status_code, expected_status)
