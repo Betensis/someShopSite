@@ -129,6 +129,10 @@ class Product(models.Model):
         max_length=7,
         choices=SexChoice.choices,
     )
+    is_for_kids = models.BooleanField(
+        verbose_name=_('для детей'),
+        default=False,
+    )
 
     def __str__(self):
         return self.title
