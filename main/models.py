@@ -26,6 +26,7 @@ class MainCategory(models.Model):
         unique=True,
         unique_with="title",
         editable=True,
+        db_index=True,
     )
 
     def __str__(self):
@@ -52,6 +53,7 @@ class Subcategory(models.Model):
         unique=True,
         unique_with="title",
         editable=True,
+        db_index=True,
     )
     product_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
 
@@ -75,6 +77,7 @@ class Brand(models.Model):
         unique=True,
         unique_with="title",
         editable=True,
+        db_index=True,
     )
 
     def __str__(self):
@@ -108,9 +111,11 @@ class Product(models.Model):
         Subcategory,
         models.CASCADE,
         verbose_name=_("категория"),
+        db_index=True,
     )
     image = models.ImageField(
         _("фотокарточка"),
+        blank=True,
         null=True,
     )
     slug = AutoSlugField(
@@ -123,15 +128,18 @@ class Product(models.Model):
         Brand,
         models.CASCADE,
         verbose_name=_("бренд"),
+        db_index=True,
     )
     sex = models.CharField(
         verbose_name=_("пол"),
         max_length=7,
         choices=SexChoice.choices,
+        db_index=True,
     )
     is_for_kids = models.BooleanField(
         verbose_name=_("для детей"),
         default=False,
+        db_index=True,
     )
 
     def __str__(self):
