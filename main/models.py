@@ -86,8 +86,8 @@ class Product(models.Model):
         abstract = True
 
     class SexChoice(models.TextChoices):
-        MALE = _("male")
-        FEMALE = _("female")
+        MAN = _("man")
+        WOMAN = _("woman")
         UNISEX = _("unisex")
 
     title = models.CharField(
