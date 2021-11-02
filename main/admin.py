@@ -29,13 +29,17 @@ class ProductAdmin(admin.ModelAdmin):
     }
     list_display = [
         "title",
-        "description",
         "price",
         "category",
         "get_main_category",
         "brand",
         "slug",
+        "sex",
+        "for_kids",
     ]
+
+    def for_kids(self, obj):
+        return obj.is_for_kids
 
     @admin.display(description="Основная категория")
     def get_main_category(self, obj):
