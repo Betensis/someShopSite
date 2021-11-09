@@ -1,0 +1,81 @@
+header{
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    background-color: #000000;
+    z-index: 2;
+}
+header nav{
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.gender_selection{
+    display: block;
+}
+.gender_name{
+    display: inline;
+    margin: 10px;
+    padding-bottom: 2px;
+}
+.gender_name:hover{
+    border-bottom: 3px solid #798f8c;
+    transition: 0.4s;
+}
+.gender_name a:hover{
+    color: #FFFFFF;
+    transition: 0.4s;
+}
+.gender_name a{
+    color: #D9EBE9;
+    font-size: 23px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+.logo_weapper{
+    display: flex;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    position: absolute;
+    justify-content: center;
+    align-items:center;
+}
+.logo{
+    color:#798f8c;
+    font-size: 36px;
+    font-weight: 900;
+}
+.logo:hover{
+    color: #D9EBE9;
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+    transition: 0.7s;
+}
+.wrapper_system{
+    display: block;
+    
+}
+.wrapper_system .entrance, .cart{
+    display: inline;
+    margin: 10px;
+}
+.wrapper_system .entrance a, .cart a{
+    color: #D9EBE9;
+    font-size: 28px;
+    text-decoration: none;
+}
+.wrapper_system .entrance:hover, .cart:hover{
+    border-bottom: 3px solid #798f8c;
+    transition: 0.5s;
+}
+.wrapper_system .entrance a:hover, .cart a:hover{
+    color:#FFFFFF;
+    transition: 0.5s;
+}
