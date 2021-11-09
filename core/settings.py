@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 
 import dotenv
+from django.urls import reverse_lazy
 
 from .utils import env
 
@@ -41,9 +42,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
-APPS = [
-    "main",
-]
+APPS = ["main", "account"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -162,3 +161,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Media
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+LOGIN_REDIRECT_URL = reverse_lazy("main:index")
+LOGOUT_REDIRECT_URL = reverse_lazy("main:index")
+
+AUTH_USER_MODEL = "account.Account"
