@@ -3,10 +3,6 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'main/css/style.css' %}"> 
-    <link rel="stylesheet" href="{% static 'main/css/header.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Calligraffitti&display=swap" rel="stylesheet">
     <title>
         {% block title %}
 
@@ -14,15 +10,18 @@
     </title>
     <link rel="stylesheet" href="{% static 'main/css/reset.css' %}">
     <link rel="stylesheet" href="{% static 'main/css/_header.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/_begin.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/_genderChoice.css' %}">
 </head>
 <body>
 
 {% include "_inc/header.html" %}
+{% include "_inc/begin.html" %}
+{% include "_inc/genderChoice.html" %}
 
 {% block body %}
-
 {% endblock body %}
-{% include "_inc/footer.html" %}
+
 
 </body>
 </html>

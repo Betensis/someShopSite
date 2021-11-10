@@ -50,6 +50,7 @@ header nav{
     color:#798f8c;
     font-size: 36px;
     font-weight: 900;
+    cursor: pointer;
 }
 .logo:hover{
     color: #D9EBE9;

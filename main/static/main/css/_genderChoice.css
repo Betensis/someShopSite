@@ -1,0 +1,23 @@
+.genderChoice {
+    background-color: #44535e;
+    padding-top: 130px;
+    padding-bottom: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.gender__img {
+    width: 400px;
+    height: 600px;
+    object-fit: cover;
+    padding: 30px;
+}
+
+.gender__descr {
+    color: #D9EBE9;
+    font-size: 23px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+}
