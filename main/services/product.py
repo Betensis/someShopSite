@@ -1,4 +1,5 @@
 from itertools import zip_longest
+from typing import Optional
 
 from django.db.models import QuerySet, Model
 
@@ -51,8 +52,8 @@ class ProductService:
 
     @classmethod
     def get_products_by_subcategory(
-        cls, subcategory_slug: Subcategory, sex: str = None
-    ):
+        cls, subcategory_slug: str, sex: str = None
+    ) -> Optional[QuerySet[Product]]:
         subcategory = Subcategory.objects.get_or_none(slug=subcategory_slug)
         if subcategory is None:
             return None
