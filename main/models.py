@@ -150,7 +150,7 @@ class Product(BaseModel):
         db_index=True,
         blank=True,
     )
-    is_for_kids = models.BooleanField(
+    for_kids = models.BooleanField(
         verbose_name=_("для детей"),
         default=False,
         db_index=True,
