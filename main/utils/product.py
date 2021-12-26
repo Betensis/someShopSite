@@ -1,9 +1,10 @@
-from typing import Type
 import inspect
+from typing import Type
 
 from django.contrib.contenttypes.models import ContentType
 
 from main import models
+from main.models import Product
 from main.utils.content_type import get_content_model_type_by_model
 
 
@@ -35,3 +36,7 @@ def get_product_sub_model_content_types() -> dict[str, Type[ContentType]]:
         product_sub_class_models.items(),
     )
     return dict(product_content_types)
+
+
+def is_valid_sex_name(sex) -> bool:
+    return type(sex) is str and sex in Product.SexChoice

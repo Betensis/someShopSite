@@ -1,13 +1,12 @@
 import time
-from string import ascii_letters
 from random import choice
+from string import ascii_letters
 from typing import Type, TypeVar
 
 from django.contrib.auth import get_user_model
 
 from main.models import Brand, MainCategory, Subcategory, Product
 from main.utils.content_type import get_content_model_type_by_model
-
 
 T = TypeVar("T")
 User = get_user_model()

@@ -1,9 +1,10 @@
+from django.http import Http404
 from django.views.defaults import page_not_found
 from django.views.generic import TemplateView, ListView, DetailView
 
-from .services.main_category import MainCategoryService
+from .models import MainCategory, Subcategory, Product
 from .services.product import ProductService
-from .services.subcategory import SubcategoryService
+from .utils.product import is_valid_sex_name
 from .utils.view import send_user_context
 
 
@@ -22,10 +23,18 @@ class MainCategoryView(ListView):
     context_object_name = "products"
 
     def get_queryset(self):
-        main_category = MainCategoryService.get_object_or_404(
-            slug=self.kwargs["main_category_slug"],
+        sex = self.kwargs.get("sex")
+        if not is_valid_sex_name(sex):
+            raise Http404("invalid sex name")
+
+        product_service = ProductService()
+        main_category = MainCategory.objects.get_or_none(
+            slug=self.kwargs["main_category_slug"]
         )
-        return MainCategoryService.get_products_by_main_category(main_category)
+        if main_category is None:
+            return []
+
+        return product_service.sex(sex).main_category(main_category).get_products()
 
     @send_user_context
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -37,13 +46,18 @@ class SubcategoryView(ListView):
     context_object_name = "products"
 
     def get_queryset(self):
-        subcategory = SubcategoryService.get_object_or_404(
+        sex = self.kwargs["sex"]
+        if sex not in Product.SexChoice:
+            raise Http404("invalid sex name")
+
+        product_service = ProductService()
+        subcategory = Subcategory.objects.get_or_none(
             slug=self.kwargs["subcategory_slug"]
         )
-        products = SubcategoryService.get_products_by_subcategory(subcategory)
-        if products is None:
+        if subcategory is None:
             return page_not_found(self.request)
-        return products
+
+        return product_service.sex(sex).subcategory(subcategory).get_products()
 
     @send_user_context
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -55,12 +69,15 @@ class ProductDetailView(DetailView):
     context_object_name = "product"
 
     def get_queryset(self):
-        subcategory = SubcategoryService.get_object_or_404(
-            slug=self.kwargs["subcategory_slug"]
+        sex = self.kwargs["sex"]
+        if not is_valid_sex_name(sex):
+            raise Http404("invalid sex name")
+
+        products = ProductService.get_products_by_subcategory(
+            self.kwargs["subcategory_slug"], sex
         )
-        products = SubcategoryService.get_products_by_subcategory(subcategory)
         if products is None:
-            return page_not_found(self.request)
+            raise Http404()
         return products
 
     @send_user_context
@@ -73,4 +90,4 @@ class KidsView(ListView):
     context_object_name = "products"
 
     def get_queryset(self):
-        return ProductService.get_all_products(for_kids=True)
+        return ProductService().for_kids(True).get_products()

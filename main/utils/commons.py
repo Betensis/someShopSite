@@ -1,4 +1,4 @@
-from typing import Iterable, Any
+from typing import Iterable
 
 
 def remove_none(iterable: Iterable) -> list:

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
-    <p>{{ product.title }}</p>
+    <p>{{ product }}</p>
     {% if product.img %}
         <img src="{{ product.image.url }}" height="250" width="500" alt="">
     {% endif %}

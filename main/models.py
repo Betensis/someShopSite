@@ -7,11 +7,25 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
 
-
 User = get_user_model()
 
 
-class MainCategory(models.Model):
+class BaseManager(models.Manager):
+    def get_or_none(self, *args, **kwargs):
+        try:
+            return self.get(*args, **kwargs)
+        except self.DoesNotExist:
+            return None
+
+
+class BaseModel(models.Model):
+    class Meta:
+        abstract = True
+
+    objects = BaseManager()
+
+
+class MainCategory(BaseModel):
     class Meta:
         verbose_name = _("основная категория")
         verbose_name_plural = _("основные категории")
@@ -33,7 +47,7 @@ class MainCategory(models.Model):
         return self.title
 
 
-class Subcategory(models.Model):
+class Subcategory(BaseModel):
     class Meta:
         verbose_name = _("подкатегория")
         verbose_name_plural = _("подкатегории")
@@ -61,7 +75,7 @@ class Subcategory(models.Model):
         return self.title
 
 
-class Brand(models.Model):
+class Brand(BaseModel):
     class Meta:
         verbose_name = _("бренд")
         verbose_name_plural = _("бренды")
@@ -84,14 +98,13 @@ class Brand(models.Model):
         return self.title
 
 
-class Product(models.Model):
+class Product(BaseModel):
     class Meta:
         abstract = True
 
     class SexChoice(models.TextChoices):
         MAN = _("man")
         WOMAN = _("woman")
-        UNISEX = _("unisex")
 
     title = models.CharField(
         verbose_name=_("название"),
@@ -135,6 +148,7 @@ class Product(models.Model):
         max_length=7,
         choices=SexChoice.choices,
         db_index=True,
+        blank=True,
     )
     is_for_kids = models.BooleanField(
         verbose_name=_("для детей"),

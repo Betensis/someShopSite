@@ -1,6 +1,15 @@
 from django.contrib import admin
 
-from .models import MainCategory, Subcategory, Shoes, Brand, Hat, OrderProduct, Order
+from .models import (
+    MainCategory,
+    Subcategory,
+    Shoes,
+    Brand,
+    Hat,
+    OrderProduct,
+    Order,
+    Outerwear,
+)
 
 
 @admin.register(MainCategory)
@@ -22,7 +31,7 @@ class SubcategoryAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(Shoes, Hat)
+@admin.register(Shoes, Hat, Outerwear)
 class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         "slug": ("title",),
