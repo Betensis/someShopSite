@@ -4,6 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
 
@@ -14,7 +15,7 @@ class BaseManager(models.Manager):
     def get_or_none(self, *args, **kwargs):
         try:
             return self.get(*args, **kwargs)
-        except self.DoesNotExist:
+        except self.model.DoesNotExist:
             return None
 
 
@@ -173,7 +174,9 @@ class Hat(Product):
 
 
 class Outerwear(Product):
-    pass
+    class Meta:
+        verbose_name = _("Верхняя одежда")
+        verbose_name_plural = _("Верхняя одежда")
 
 
 class OrderProduct(models.Model):

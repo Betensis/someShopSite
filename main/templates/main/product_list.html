@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block body %}
+    {% for product in products %}
+        <div style="display: flex; width: 100%; flex-direction: row;">
+            <p>{{ product.title }}</p>
+            {% if product.image %}
+                <img src="{{ product.image.url }}" height="250" width="250" alt="">
+            {% endif %}
+            <p>{{ product.sex }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from main import models
 from main.models import Product
-from main.utils.content_type import get_content_model_type_by_model
+from main.utils.service.content_type import get_content_model_type_by_model
 
 
 def get_product_sub_models() -> dict[str, Type[models.Product]]:

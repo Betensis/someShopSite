@@ -24,3 +24,10 @@ urlpatterns = [
     path("", include("main.urls", "main")),
     path("account/", include("account.urls", "account")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if settings.DEBUG:
+    urlpatterns.extend(
+        [
+            path("__debug__/", include("debug_toolbar.urls")),
+        ]
+    )

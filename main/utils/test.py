@@ -5,8 +5,9 @@ from typing import Type, TypeVar
 
 from django.contrib.auth import get_user_model
 
+from main import models
 from main.models import Brand, MainCategory, Subcategory, Product
-from main.utils.content_type import get_content_model_type_by_model
+from main.utils.service.content_type import get_content_model_type_by_model
 
 T = TypeVar("T")
 User = get_user_model()
@@ -44,7 +45,7 @@ def create_products(
 ) -> list[T]:
     if not issubclass(product_model, Product) and product_model is not Product:
         raise TypeError(
-            "product_model должен быть подклассом Product и не быть самим классом Product"
+            "product_model must be subclass Product and dont be instance of Product"
         )
 
     return [_create_product(product_model, **product_kwargs) for _ in range(amount)]
@@ -56,7 +57,9 @@ def _create_product(product_model: Type[Product], **product_kwargs):
         main_category = create_main_category()
         product_kwargs["category"] = create_subcategory(main_category, product_model)
 
-    product_kwargs.setdefault("title", get_rand_str())
+    product_kwargs.setdefault(
+        "title", product_model.__name__ + " test object: " + get_rand_str()
+    )
     product_kwargs.setdefault("description", get_rand_str(50))
     product_kwargs.setdefault("price", 150)
     product_kwargs.setdefault("brand", create_brand())
@@ -67,3 +70,15 @@ def create_user(**user_kwargs):
     user_kwargs.setdefault("username", get_rand_str())
     user_kwargs.setdefault("email", get_rand_str() + "@mail.com")
     return User.objects.create_user(**user_kwargs)
+
+
+def create_hats(**kwargs):
+    return create_products(models.Hat, **kwargs)
+
+
+def create_shoes(**kwargs):
+    return create_products(models.Shoes, **kwargs)
+
+
+def create_outerwears(**kwargs):
+    return create_products(models.Outerwear, **kwargs)

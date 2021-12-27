@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand
 
 from main.models import MainCategory, Subcategory
-from main.utils.product import get_product_sub_model_content_types
+from main.utils.service.product import get_product_sub_model_content_types
 
 
 @dataclass(frozen=True)

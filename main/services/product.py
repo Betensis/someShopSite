@@ -1,28 +1,26 @@
 from itertools import zip_longest
-from typing import Optional
+from typing import Optional, Type
 
 from django.db.models import QuerySet, Model
 
 from main.models import Product, MainCategory, Subcategory, Brand
-from main.utils.commons import remove_none
-from main.utils.product import get_product_sub_models, is_valid_sex_name
+from main.utils.service.product import get_product_sub_models, is_valid_sex_name
+from main.utils.shared import remove_none
 
 
 class ProductService:
-    def __init__(self, prepare_query: bool = True):
-        self.__products = self.__get_prepared_products() if prepare_query else None
+    def __init__(self):
+        self.__filter_options_dict = {}
 
     @staticmethod
-    def __get_prepared_products() -> list[QuerySet[Product]]:
-        products_models = get_product_sub_models().values()
-        products = list(map(lambda x: x.objects.all(), products_models))
+    def __get_product_models() -> list[Type[Product]]:
+        return list(get_product_sub_models().values())
 
-        return products
+    def __set_filter_options(self, **kwargs):
+        self.__filter_options_dict.update(kwargs)
 
-    def __filter_products(self, *args, **kwargs) -> "ProductService":
-        self.__products = map(
-            lambda product_query: product_query.filter(*args, **kwargs), self.__products
-        )
+    def __filter_products(self, **kwargs) -> "ProductService":
+        self.__set_filter_options(**kwargs)
 
         return self
 
@@ -30,7 +28,7 @@ class ProductService:
         return self.__filter_products(for_kids=is_product_for_kids)
 
     def sex(self, sex_name: Product.SexChoice) -> "ProductService":
-        return self.__filter_products(sex=sex_name)
+        return self.__filter_products(sex=sex_name, sex__isnull=True)
 
     def main_category(self, main_category: MainCategory) -> "ProductService":
         return self.__filter_products(category__main_category=main_category)
@@ -41,11 +39,24 @@ class ProductService:
     def brand(self, brand: Brand) -> "ProductService":
         return self.__filter_products(brand=brand)
 
-    def get_products(self) -> list:
+    def get_products(self) -> list[Product]:
+        product_models = self.__get_product_models()
+        if self.__filter_options_dict == {}:
+            products = map(
+                lambda product_model: product_model.objects.all(), product_models
+            )
+        else:
+            products = map(
+                lambda product_model: product_model.objects.filter(
+                    **self.__filter_options_dict
+                ),
+                product_models,
+            )
+
         return remove_none(
             [
                 product
-                for product_tuple in zip_longest(*self.__products)
+                for product_tuple in zip_longest(*products)
                 for product in product_tuple
             ]
         )
