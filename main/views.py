@@ -3,25 +3,25 @@ from typing import Optional
 from django.http import Http404
 from django.views.generic import ListView, DetailView
 
-from core.services import PageView
+from core.services import PageViewMixin
 from main.utils.service.product import is_valid_sex_name
 from .models import MainCategory, Subcategory, Product
 from .services.product import ProductService
 
 
-class IndexView(PageView, ListView):
+class IndexView(PageViewMixin, ListView):
     template_name = "main/product_list.html"
     context_object_name = "products"
-    page_title = 'SomeShopSite'
+    page_title = "SomeShopSite"
 
     def get_queryset(self):
         return ProductService().get_products()
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data() | ListView.get_context_data(self, **kwargs)
+        return super().get_context_data(**kwargs) | self.get_page_context_data()
 
 
-class MainCategoryView(PageView, ListView):
+class MainCategoryView(PageViewMixin, ListView):
     template_name = "main/product_list.html"
     context_object_name = "products"
 
@@ -34,7 +34,7 @@ class MainCategoryView(PageView, ListView):
             slug=self.kwargs["main_category_slug"]
         )
         if main_category is None:
-            return 'Категория'
+            return "Категория"
 
         return main_category.title
 
@@ -54,10 +54,10 @@ class MainCategoryView(PageView, ListView):
         return product_service.sex(sex).main_category(self.main_category).get_products()
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data() | ListView.get_context_data(self, **kwargs)
+        return super().get_context_data(**kwargs) | self.get_page_context_data()
 
 
-class SubcategoryView(PageView, ListView):
+class SubcategoryView(PageViewMixin, ListView):
     template_name = "main/product_list.html"
     context_object_name = "products"
 
@@ -87,10 +87,10 @@ class SubcategoryView(PageView, ListView):
         return self.subcategory.title
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data() | ListView.get_context_data(self, **kwargs)
+        return super().get_context_data(**kwargs) | self.get_page_context_data()
 
 
-class ProductDetailView(PageView, DetailView):
+class ProductDetailView(PageViewMixin, DetailView):
     template_name = "main/product_detail.html"
     context_object_name = "product"
 
@@ -121,19 +121,19 @@ class ProductDetailView(PageView, DetailView):
         if self.product is None:
             return super().get_title()
 
-        return self.product.category.title + ': ' + self.product.title
+        return self.product.category.title + ": " + self.product.title
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data() | DetailView.get_context_data(self, **kwargs)
+        return super().get_context_data(**kwargs) | self.get_page_context_data()
 
 
-class KidsView(PageView, ListView):
+class KidsView(PageViewMixin, ListView):
     template_name = "main/product_list.html"
     context_object_name = "products"
-    page_title = 'Детская одежда'
+    page_title = "Детская одежда"
 
     def get_queryset(self):
         return ProductService().for_kids(True).get_products()
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data() | ListView.get_context_data(self, **kwargs)
+        return super().get_context_data(**kwargs) | self.get_page_context_data()
