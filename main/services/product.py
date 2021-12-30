@@ -1,5 +1,5 @@
 from itertools import zip_longest
-from typing import Optional, Type
+from typing import Optional, Type, Any, Generator
 
 from django.db.models import QuerySet, Model
 
@@ -39,7 +39,7 @@ class ProductService:
     def brand(self, brand: Brand) -> "ProductService":
         return self.__filter_products(brand=brand)
 
-    def get_products(self) -> list[Product]:
+    def get_products(self) -> Generator[Any, Any, None]:
         product_models = self.__get_product_models()
         if self.__filter_options_dict == {}:
             products = map(
@@ -54,11 +54,11 @@ class ProductService:
             )
 
         return remove_none(
-            [
+            (
                 product
                 for product_tuple in zip_longest(*products)
                 for product in product_tuple
-            ]
+            )
         )
 
     @classmethod
