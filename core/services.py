@@ -1,7 +1,7 @@
 from typing import Optional
 
 from django.contrib.auth import get_user_model
-from django.views.generic.base import ContextMixin, View
+from django.views.generic.base import View
 
 from core import settings
 

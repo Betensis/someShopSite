@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}
-    {{ title }}
-{% endblock %}
-
 {% block body %}
+    {% if user.is_authenticated %}
+        <a href="{% url 'account:logout' %}">logout</a>
+    {% else %}
+        <a href="{% url 'account:login' %}"> login</a>
+    {% endif %}
     {% for product in products %}
         <div style="display: flex; width: 100%; flex-direction: row;">
             <p>{{ product.title }}</p>
