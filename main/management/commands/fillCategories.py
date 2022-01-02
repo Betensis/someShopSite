@@ -7,7 +7,7 @@ from main.models import MainCategory, Subcategory
 from main.utils.service.product import get_product_sub_model_content_types
 
 
-@dataclass(frozen=True)
+@dataclass
 class Categories:
     main_category: MainCategory
     subcategories: list[Subcategory]
@@ -22,12 +22,22 @@ default_categories: list[Categories] = [
             Subcategory(
                 title="Кепки",
                 slug="cap",
-                product_content_type=content_type_by_model["Hat"],
+                product_content_type=content_type_by_model["HatDress"],
             ),
             Subcategory(
                 title="Банданы",
                 slug="bandana",
-                product_content_type=content_type_by_model["Hat"],
+                product_content_type=content_type_by_model["HatDress"],
+            ),
+            Subcategory(
+                title="Шапки",
+                slug="hat",
+                product_content_type=content_type_by_model["HatDress"],
+            ),
+            Subcategory(
+                title="Балаклава",
+                slug="balaklava",
+                product_content_type=content_type_by_model["HatDress"],
             ),
         ],
     ),
@@ -59,6 +69,11 @@ default_categories: list[Categories] = [
                 slug="t-shirt",
                 product_content_type=content_type_by_model["Outerwear"],
             ),
+            Subcategory(
+                title="Худи",
+                slug="hoodies",
+                product_content_type=content_type_by_model["Outerwear"],
+            ),
         ],
     ),
 ]
@@ -69,12 +84,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for category in default_categories:
-            try:
-                category.main_category.validate_unique()
-            except ValidationError:
-                pass
-            else:
-                category.main_category.save()
+            category.main_category, _ = MainCategory.objects.get_or_create(
+                title=category.main_category, slug=category.main_category.slug
+            )
+
             for subcategory in category.subcategories:
                 subcategory.main_category = category.main_category
                 try:
@@ -82,3 +95,5 @@ class Command(BaseCommand):
                 except ValidationError:
                     continue
                 subcategory.save()
+
+        self.stdout.write(self.style.SUCCESS("Successfully filled categories"))

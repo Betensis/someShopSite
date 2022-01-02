@@ -12,5 +12,6 @@ class Command(BaseCommand):
             User.objects.create_superuser(
                 username="admin", email="admin@mail.com", password="111111"
             )
+            self.stdout.write(self.style.SUCCESS("Admin created"))
         except IntegrityError:
-            print("User already exist")
+            self.stdout.write(self.style.SUCCESS("Admin already exist"))

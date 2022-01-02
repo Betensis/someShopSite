@@ -167,7 +167,7 @@ class Shoes(Product):
         verbose_name_plural = _("обувь")
 
 
-class Hat(Product):
+class HatDress(Product):
     class Meta:
         verbose_name = _("головной убор")
         verbose_name_plural = _("головные уборы")

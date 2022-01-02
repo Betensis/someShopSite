@@ -6,6 +6,9 @@ default_brands = [
     "Nike",
     "Adidas",
     "Levi's",
+    "Запорожец Heritage",
+    "Mark Formelle",
+    "Pull&Bear",
 ]
 
 
@@ -15,3 +18,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for brand_title in default_brands:
             Brand.objects.get_or_create(title=brand_title)
+        self.stdout.write(self.style.SUCCESS("Successfully filled brands"))

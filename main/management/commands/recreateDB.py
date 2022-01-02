@@ -14,6 +14,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         delete_db()
-        call_command("deletemigrationdirs")
+        call_command("deleteMigrationDirs")
         call_command("makemigrations", "main")
         call_command("migrate", "--run-syncdb")
+
+        self.stdout.write(self.style.SUCCESS("Database recreated"))

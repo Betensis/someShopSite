@@ -73,7 +73,7 @@ def create_user(**user_kwargs):
 
 
 def create_hats(**kwargs):
-    return create_products(models.Hat, **kwargs)
+    return create_products(models.HatDress, **kwargs)
 
 
 def create_shoes(**kwargs):

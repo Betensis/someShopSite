@@ -5,7 +5,7 @@ from .models import (
     Subcategory,
     Shoes,
     Brand,
-    Hat,
+    HatDress,
     OrderProduct,
     Order,
     Outerwear,
@@ -31,7 +31,7 @@ class SubcategoryAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(Shoes, Hat, Outerwear)
+@admin.register(Shoes, HatDress, Outerwear)
 class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         "slug": ("title",),
