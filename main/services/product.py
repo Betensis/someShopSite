@@ -1,5 +1,5 @@
-from itertools import zip_longest, islice
-from typing import Optional, Type, Generator, Union, Sequence
+from itertools import zip_longest
+from typing import Optional, Type
 
 from django.db.models import QuerySet, Model
 
@@ -37,7 +37,9 @@ class ProductService:
     def brand(self, brand: Brand) -> "ProductService":
         return self.__set_filter_options(brand=brand)
 
-    def get_products(self, limit: int = settings.PRODUCTS_IN_PAGE, offset: Optional[int] = None) -> list[Product]:
+    def get_products(
+        self, limit: int = settings.PRODUCTS_IN_PAGE, offset: Optional[int] = None
+    ) -> list[Product]:
         product_models = self.__get_product_models()
 
         if offset is None:
@@ -47,24 +49,26 @@ class ProductService:
             products = map(
                 lambda product_model: product_model.objects.select_related(
                     *self._select_related_fields
-                ).all()[offset:offset + limit],
+                ).all()[offset : offset + limit],
                 product_models,
             )
         else:
             products = map(
                 lambda product_model: product_model.objects.select_related(
                     *self._select_related_fields
-                ).filter(**self.__filter_options_dict)[offset:offset + limit],
+                ).filter(**self.__filter_options_dict)[offset : offset + limit],
                 product_models,
             )
 
-        return list(remove_none(
-            (
-                product
-                for product_tuple in zip_longest(*products)
-                for product in product_tuple
+        return list(
+            remove_none(
+                (
+                    product
+                    for product_tuple in zip_longest(*products)
+                    for product in product_tuple
+                )
             )
-        ))[offset:offset + limit]
+        )[offset : offset + limit]
 
     @classmethod
     def get_products_by_subcategory(
