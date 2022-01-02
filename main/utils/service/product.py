@@ -10,8 +10,7 @@ from main.utils.service.content_type import get_content_model_type_by_model
 
 def get_product_sub_models() -> dict[str, Type[models.Product]]:
     """
-    Возвращает словарь, где сопостовляется имя наследников Product и их класс
-    :return:
+    :return: Возвращает словарь, где сопостовляется имя наследников Product и их класс
     """
     # Выбираем все подклассы Product
     product_models = filter(
