@@ -166,7 +166,7 @@ LOGOUT_REDIRECT_URL = reverse_lazy("main:index")
 
 AUTH_USER_MODEL = "account.Account"
 
-PRODUCTS_IN_PAGE = 10
+PRODUCTS_IN_PAGE = 20
 
 DEBUG_TOOLBAR_PANELS = [
     "debug_toolbar.panels.history.HistoryPanel",
