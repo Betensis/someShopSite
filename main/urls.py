@@ -23,9 +23,4 @@ urlpatterns = [
         views.ProductDetailView.as_view(),
         name="product-detail",
     ),
-    path(
-        "kids/",
-        views.KidsView.as_view(),
-        name="kids",
-    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

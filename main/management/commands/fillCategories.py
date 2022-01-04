@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand
 
 from main.models import MainCategory, Subcategory
-from main.utils.service.product import get_product_sub_model_content_types
 
 
 @dataclass
@@ -13,8 +12,6 @@ class Categories:
     subcategories: list[Subcategory]
 
 
-content_type_by_model = get_product_sub_model_content_types()
-
 default_categories: list[Categories] = [
     Categories(
         MainCategory(title="Головные уборы", slug="hat"),
@@ -22,22 +19,18 @@ default_categories: list[Categories] = [
             Subcategory(
                 title="Кепки",
                 slug="cap",
-                product_content_type=content_type_by_model["HatDress"],
             ),
             Subcategory(
                 title="Банданы",
                 slug="bandana",
-                product_content_type=content_type_by_model["HatDress"],
             ),
             Subcategory(
                 title="Шапки",
                 slug="hat",
-                product_content_type=content_type_by_model["HatDress"],
             ),
             Subcategory(
                 title="Балаклава",
                 slug="balaklava",
-                product_content_type=content_type_by_model["HatDress"],
             ),
         ],
     ),
@@ -47,12 +40,10 @@ default_categories: list[Categories] = [
             Subcategory(
                 title="Кроссовки",
                 slug="sneakers",
-                product_content_type=content_type_by_model["Shoes"],
             ),
             Subcategory(
                 title="Сандали",
                 slug="sandals",
-                product_content_type=content_type_by_model["Shoes"],
             ),
         ],
     ),
@@ -62,17 +53,14 @@ default_categories: list[Categories] = [
             Subcategory(
                 title="Куртки",
                 slug="jacket",
-                product_content_type=content_type_by_model["Outerwear"],
             ),
             Subcategory(
                 title="Футболки",
                 slug="t-shirt",
-                product_content_type=content_type_by_model["Outerwear"],
             ),
             Subcategory(
                 title="Худи",
                 slug="hoodies",
-                product_content_type=content_type_by_model["Outerwear"],
             ),
         ],
     ),

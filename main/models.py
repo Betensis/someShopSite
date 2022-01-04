@@ -1,8 +1,6 @@
 from autoslug import AutoSlugField
 from django.contrib.auth import get_user_model
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
@@ -70,7 +68,6 @@ class Subcategory(BaseModel):
         editable=True,
         db_index=True,
     )
-    product_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -99,10 +96,15 @@ class Brand(BaseModel):
         return self.title
 
 
-class Product(BaseModel):
+class ProductInfoTags(models.Model):
     class Meta:
-        abstract = True
+        verbose_name = _("Инфо тег")
+        verbose_name_plural = _("Инфо теги")
 
+    title = models.CharField(max_length=50, unique=True, verbose_name=_("название"))
+
+
+class Product(BaseModel):
     class SexChoice(models.TextChoices):
         MAN = _("man")
         WOMAN = _("woman")
@@ -132,12 +134,6 @@ class Product(BaseModel):
         blank=True,
         null=True,
     )
-    slug = AutoSlugField(
-        populate_from="title",
-        unique=True,
-        unique_with="title",
-        editable=True,
-    )
     brand = models.ForeignKey(
         Brand,
         models.CASCADE,
@@ -151,68 +147,49 @@ class Product(BaseModel):
         db_index=True,
         blank=True,
     )
-    for_kids = models.BooleanField(
-        verbose_name=_("для детей"),
-        default=False,
-        db_index=True,
+
+    info_tags = models.ManyToManyField(
+        ProductInfoTags,
     )
 
     def __str__(self):
         return self.title
 
 
-class Shoes(Product):
-    class Meta:
-        verbose_name = _("обувь")
-        verbose_name_plural = _("обувь")
-
-
-class HatDress(Product):
-    class Meta:
-        verbose_name = _("головной убор")
-        verbose_name_plural = _("головные уборы")
-
-
-class Outerwear(Product):
-    class Meta:
-        verbose_name = _("Верхняя одежда")
-        verbose_name_plural = _("Верхняя одежда")
-
-
-class OrderProduct(models.Model):
-    customer = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey("content_type", "object_id")
-    quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
-    order = models.ForeignKey(
-        "Order",
-        on_delete=models.CASCADE,
-        related_name="products",
-    )
-
-    def get_content_type_repr(self):
-        return str(self.content_type).split("|")[1]
-
-    def __str__(self):
-        return f"{self.customer} {self.get_content_type_repr()} id:{self.object_id}"
-
-
-class Order(models.Model):
-    customer = models.ForeignKey(
-        User,
-        models.CASCADE,
-    )
-    ordered_date = models.DateTimeField()
-    ordered = models.BooleanField()
-
-    def __str__(self):
-        return f"{self.customer.email}: " + ", ".join(
-            map(
-                lambda item: item.get_content_type_repr() + f" id:{item.object_id}",
-                self.products.all()[:3],
-            )
-        )
+# class OrderProduct(models.Model):
+#     customer = models.ForeignKey(
+#         User,
+#         on_delete=models.CASCADE,
+#     )
+#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+#     object_id = models.PositiveIntegerField()
+#     content_object = GenericForeignKey("content_type", "object_id")
+#     quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
+#     order = models.ForeignKey(
+#         "Order",
+#         on_delete=models.CASCADE,
+#         related_name="products",
+#     )
+#
+#     def get_content_type_repr(self):
+#         return str(self.content_type).split("|")[1]
+#
+#     def __str__(self):
+#         return f"{self.customer} {self.get_content_type_repr()} id:{self.object_id}"
+#
+#
+# class Order(models.Model):
+#     customer = models.ForeignKey(
+#         User,
+#         models.CASCADE,
+#     )
+#     ordered_date = models.DateTimeField()
+#     ordered = models.BooleanField()
+#
+#     def __str__(self):
+#         return f"{self.customer.email}: " + ", ".join(
+#             map(
+#                 lambda item: item.get_content_type_repr() + f" id:{item.object_id}",
+#                 self.products.all()[:3],
+#             )
+#         )

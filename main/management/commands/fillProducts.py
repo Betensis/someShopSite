@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand, call_command
 
-from main.models import HatDress, Brand, Subcategory, Shoes, Outerwear
+from main.models import Brand, Subcategory, Product
 
 other_fill_commands = [
     "fillBrands",
@@ -25,49 +25,49 @@ hoodies_category = Subcategory(slug="hoodies")
 
 
 products = [
-    HatDress(
+    Product(
         title="U NSW H86 SWOOSH WASH CAP",
         price=1899,
         brand=nike_brand,
         category=cap_category,
         image="U NSW H86 SWOOSH WASH CAP.webp",
     ),
-    HatDress(
+    Product(
         title="Шапка Ushanka Beanie",
         price=1890,
         brand=zaporojets_brand,
         category=hat_category,
         image="MP002XU04TC8_16128390_1_v1.jpg",
     ),
-    HatDress(
+    Product(
         title="Балаклава Mark",
         price=599,
         brand=mark_formelle_brand,
         category=balaklava_category,
         image="MP002XU04QHK_15883563_1_v1.webp",
     ),
-    Shoes(
+    Product(
         title="Кросовки Pull&Bear",
         brand=pull_n_bear_brand,
         price=1999,
         category=sneakers_category,
         image="IX001XM00DKS_14953164_1_v1.jpeg",
     ),
-    Shoes(
+    Product(
         title="Кроссовки FIREWALKER",
         brand=adidas_brand,
         price=8999,
         category=sneakers_category,
         image="RTLAAY648701_15955535_1_v1.jpg",
     ),
-    Outerwear(
+    Product(
         title="Худи Pull&Bear",
         brand=pull_n_bear_brand,
         price=2299,
         category=hoodies_category,
         image="IX001XM00EG4_15401957_1_v1.jpeg",
     ),
-    Outerwear(
+    Product(
         title="Футболка PnB",
         brand=pull_n_bear_brand,
         price=599,
