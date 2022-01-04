@@ -46,10 +46,10 @@ class MainCategory(BaseModel):
         return self.title
 
 
-class Subcategory(BaseModel):
+class Category(BaseModel):
     class Meta:
-        verbose_name = _("подкатегория")
-        verbose_name_plural = _("подкатегории")
+        verbose_name = _("категория")
+        verbose_name_plural = _("категории")
 
     title = models.CharField(
         verbose_name=_("название"),
@@ -103,6 +103,9 @@ class ProductInfoTags(models.Model):
 
     title = models.CharField(max_length=50, unique=True, verbose_name=_("название"))
 
+    def __str__(self):
+        return self.title
+
 
 class Product(BaseModel):
     class SexChoice(models.TextChoices):
@@ -124,7 +127,7 @@ class Product(BaseModel):
         max_digits=14,
     )
     category = models.ForeignKey(
-        Subcategory,
+        Category,
         models.CASCADE,
         verbose_name=_("категория"),
         db_index=True,

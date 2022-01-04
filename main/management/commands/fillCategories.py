@@ -3,32 +3,32 @@ from dataclasses import dataclass
 from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand
 
-from main.models import MainCategory, Subcategory
+from main.models import MainCategory, Category
 
 
 @dataclass
 class Categories:
     main_category: MainCategory
-    subcategories: list[Subcategory]
+    subcategories: list[Category]
 
 
 default_categories: list[Categories] = [
     Categories(
         MainCategory(title="Головные уборы", slug="hat"),
         [
-            Subcategory(
+            Category(
                 title="Кепки",
                 slug="cap",
             ),
-            Subcategory(
+            Category(
                 title="Банданы",
                 slug="bandana",
             ),
-            Subcategory(
+            Category(
                 title="Шапки",
                 slug="hat",
             ),
-            Subcategory(
+            Category(
                 title="Балаклава",
                 slug="balaklava",
             ),
@@ -37,11 +37,11 @@ default_categories: list[Categories] = [
     Categories(
         MainCategory(title="Обувь", slug="shoes"),
         [
-            Subcategory(
+            Category(
                 title="Кроссовки",
                 slug="sneakers",
             ),
-            Subcategory(
+            Category(
                 title="Сандали",
                 slug="sandals",
             ),
@@ -50,15 +50,15 @@ default_categories: list[Categories] = [
     Categories(
         MainCategory(title="Верхняя одежда", slug="outerwear"),
         [
-            Subcategory(
+            Category(
                 title="Куртки",
                 slug="jacket",
             ),
-            Subcategory(
+            Category(
                 title="Футболки",
                 slug="t-shirt",
             ),
-            Subcategory(
+            Category(
                 title="Худи",
                 slug="hoodies",
             ),

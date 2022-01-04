@@ -5,12 +5,12 @@ from django.views.generic import ListView, DetailView
 
 from core.services import PageViewMixin
 from main.utils.service.product import is_valid_sex_name
-from .models import MainCategory, Subcategory, Product
+from .models import MainCategory, Category, Product
 from .services.product import ProductService
 
 
 class IndexView(PageViewMixin, ListView):
-    template_name = "main/product_list.html"
+    template_name = "main/index.html"
     context_object_name = "products"
     page_title = "SomeShopSite"
 
@@ -57,13 +57,13 @@ class MainCategoryView(PageViewMixin, ListView):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
 
 
-class SubcategoryView(PageViewMixin, ListView):
+class CategoryView(PageViewMixin, ListView):
     template_name = "main/product_list.html"
     context_object_name = "products"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.subcategory: Optional[Subcategory] = None
+        self.category: Optional[Category] = None
 
     def get_queryset(self):
         sex = self.kwargs["sex"]
@@ -71,20 +71,20 @@ class SubcategoryView(PageViewMixin, ListView):
             raise Http404("invalid sex name")
 
         product_service = ProductService()
-        subcategory = Subcategory.objects.get_or_none(
+        category = Category.objects.get_or_none(
             slug=self.kwargs["subcategory_slug"]
         )
-        if subcategory is None:
+        if category is None:
             raise Http404()
 
-        self.subcategory = subcategory
-        return product_service.sex(sex).subcategory(subcategory).get_products()
+        self.category = category
+        return product_service.sex(sex).category(category).get_products()
 
     def get_title(self):
-        if self.subcategory is None:
-            return super(SubcategoryView, self).get_title()
+        if self.category is None:
+            return super(CategoryView, self).get_title()
 
-        return self.subcategory.title
+        return self.category.title
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
@@ -103,11 +103,9 @@ class ProductDetailView(PageViewMixin, DetailView):
         if not is_valid_sex_name(sex):
             raise Http404("invalid sex name")
 
-        products = ProductService.get_products_by_subcategory(
-            self.kwargs["subcategory_slug"], sex
+        products = ProductService().sex(sex).get_products_by_category_slug(
+            self.kwargs["subcategory_slug"]
         )
-        if products is None:
-            raise Http404()
 
         return products
 

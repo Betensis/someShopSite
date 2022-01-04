@@ -14,8 +14,8 @@ urlpatterns = [
         name="main-category",
     ),
     path(
-        "sex/<str:sex>/subcategory/<slug:subcategory_slug>/",
-        views.SubcategoryView.as_view(),
+        "sex/<str:sex>/category/<slug:category_slug>/",
+        views.CategoryView.as_view(),
         name="subcategory",
     ),
     path(

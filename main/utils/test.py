@@ -6,7 +6,7 @@ from typing import Type, TypeVar
 from django.contrib.auth import get_user_model
 
 from main import models
-from main.models import Brand, MainCategory, Subcategory, Product
+from main.models import Brand, MainCategory, Category, Product
 from main.utils.service.content_type import get_content_model_type_by_model
 
 T = TypeVar("T")
@@ -31,9 +31,9 @@ def create_main_category():
 
 def create_subcategory(
     main_category: MainCategory, product_model: Type[Product]
-) -> Subcategory:
+) -> Category:
     product_content_type = get_content_model_type_by_model(product_model)
-    return Subcategory.objects.create(
+    return Category.objects.create(
         title=get_rand_str(),
         main_category=main_category,
         product_content_type=product_content_type,

@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand, call_command
 
-from main.models import Brand, Subcategory, Product
+from main.models import Brand, Category, Product
 
 other_fill_commands = [
     "fillBrands",
@@ -15,13 +15,13 @@ pull_n_bear_brand = Brand(title="Pull&Bear")
 adidas_brand = Brand(title="Adidas")
 
 
-cap_category = Subcategory(slug="cap")
-hat_category = Subcategory(slug="hat")
-balaklava_category = Subcategory(slug="balaklava")
+cap_category = Category(slug="cap")
+hat_category = Category(slug="hat")
+balaklava_category = Category(slug="balaklava")
 
-sneakers_category = Subcategory(slug="sneakers")
+sneakers_category = Category(slug="sneakers")
 
-hoodies_category = Subcategory(slug="hoodies")
+hoodies_category = Category(slug="hoodies")
 
 
 products = [
@@ -85,7 +85,7 @@ class Command(BaseCommand):
             call_command(command)
 
         def prepare_product(product):
-            product.category = Subcategory.objects.get(slug=product.category.slug)
+            product.category = Category.objects.get(slug=product.category.slug)
             product.brand = Brand.objects.get(title=product.brand.title)
 
         for product in products:

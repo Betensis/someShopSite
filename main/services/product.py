@@ -1,11 +1,14 @@
 from django.db.models import QuerySet
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from core import settings
-from main.models import Product, MainCategory, Subcategory, Brand
+from main.models import Product, MainCategory, Category, Brand
+from main.utils.service.product import is_valid_sex_name
 
 
 class ProductService:
-    IMAGE_FIELD_NAME = 'image'
+    IMAGE_FIELD_NAME = "image"
 
     def __init__(self):
         self.__filter_options_dict = {}
@@ -19,13 +22,13 @@ class ProductService:
     def main_category(self, main_category: MainCategory) -> "ProductService":
         return self.__set_filter_options(category__main_category=main_category)
 
-    def subcategory(self, subcategory: Subcategory) -> "ProductService":
-        return self.__set_filter_options(category=subcategory)
+    def category(self, category: Category) -> "ProductService":
+        return self.__set_filter_options(category=category)
 
     def brand(self, brand: Brand) -> "ProductService":
         return self.__set_filter_options(brand=brand)
 
-    def selected_fields(self, *args):
+    def selected_fields(self, *args) -> 'ProductService':
         self._selected_fields.extend(args)
         return self
 
@@ -48,8 +51,12 @@ class ProductService:
         self.__filter_options_dict.update(kwargs)
         return self
 
-    def __add_image_url_fields(self, products: QuerySet[Product]):
+    def __add_image_url_fields(self, products: QuerySet[Product]) -> QuerySet[Product]:
         for product in products:
-            product['image_url'] = settings.MEDIA_URL + product[self.IMAGE_FIELD_NAME]
+            product["image_url"] = settings.MEDIA_URL + product[self.IMAGE_FIELD_NAME]
 
         return products
+
+    def get_products_by_category_slug(self, slug: str) -> QuerySet[Product]:
+        category = get_object_or_404(Category, slug=slug)
+        return self.category(category).get_products()
