@@ -6,6 +6,8 @@ from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
 
+from core import settings
+
 User = get_user_model()
 
 
@@ -134,7 +136,6 @@ class Product(BaseModel):
     )
     image = models.ImageField(
         _("фотокарточка"),
-        blank=True,
         null=True,
     )
     brand = models.ForeignKey(

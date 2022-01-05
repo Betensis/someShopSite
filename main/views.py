@@ -27,7 +27,6 @@ class MainCategoryView(PageViewMixin, ListView):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.main_category: Optional[MainCategory] = None
 
     def get_title(self):
         main_category = MainCategory.objects.get_or_none(
@@ -50,8 +49,7 @@ class MainCategoryView(PageViewMixin, ListView):
         if main_category is None:
             raise Http404()
 
-        self.main_category = main_category
-        return product_service.sex(sex).main_category(self.main_category).get_products()
+        return product_service.sex(sex).main_category(main_category).get_products()
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
@@ -71,9 +69,7 @@ class CategoryView(PageViewMixin, ListView):
             raise Http404("invalid sex name")
 
         product_service = ProductService()
-        category = Category.objects.get_or_none(
-            slug=self.kwargs["subcategory_slug"]
-        )
+        category = Category.objects.get_or_none(slug=self.kwargs["subcategory_slug"])
         if category is None:
             raise Http404()
 
@@ -103,9 +99,12 @@ class ProductDetailView(PageViewMixin, DetailView):
         if not is_valid_sex_name(sex):
             raise Http404("invalid sex name")
 
-        products = ProductService().sex(sex).get_products_by_category_slug(
-            self.kwargs["subcategory_slug"]
-        )
+        category = Category.objects.get_or_none(slug=self.kwargs["category_slug"])
+
+        if category is None:
+            raise Http404()
+
+        products = ProductService().sex(sex).category(category)
 
         return products
 

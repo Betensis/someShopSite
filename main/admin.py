@@ -54,5 +54,5 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(ProductInfoTags)
 class ProductInfoTagAdmin(admin.ModelAdmin):
     list_display = [
-        'title',
+        "title",
     ]
