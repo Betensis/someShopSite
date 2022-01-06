@@ -32,6 +32,7 @@ default_categories: list[Categories] = [
                 title="Балаклава",
                 slug="balaklava",
             ),
+            Category(title="Ушанка", slug="ushanka"),
         ],
     ),
     Categories(
@@ -62,6 +63,12 @@ default_categories: list[Categories] = [
                 title="Худи",
                 slug="hoodies",
             ),
+        ],
+    ),
+    Categories(
+        MainCategory(title="Низ", slug="pants"),
+        [
+            Category(title="Джоггеры", slug="joggers"),
         ],
     ),
 ]

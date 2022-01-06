@@ -6,8 +6,6 @@ from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
 
-from core import settings
-
 User = get_user_model()
 
 
@@ -85,7 +83,10 @@ class Brand(BaseModel):
         max_length=150,
         unique=True,
     )
-
+    description = models.TextField(
+        verbose_name=_("описание"),
+        max_length=350,
+    )
     slug = AutoSlugField(
         populate_from="title",
         unique=True,
@@ -98,7 +99,7 @@ class Brand(BaseModel):
         return self.title
 
 
-class ProductInfoTags(models.Model):
+class ProductInfoTags(BaseModel):
     class Meta:
         verbose_name = _("Инфо тег")
         verbose_name_plural = _("Инфо теги")
@@ -109,6 +110,30 @@ class ProductInfoTags(models.Model):
         return self.title
 
 
+class Warehouse(BaseModel):
+    class SizeChoice(models.TextChoices):
+        XXS = "XXS"
+        XS = "XS"
+        S = "S"
+        M = "M"
+        L = "L"
+
+    product = models.ForeignKey(
+        "Product",
+        models.CASCADE,
+    )
+    product_size = models.CharField(
+        choices=SizeChoice.choices,
+        verbose_name=_("размер вещи"),
+        max_length=8,
+        null=True,
+    )
+    product_quantity = models.PositiveIntegerField(
+        verbose_name=_("количество вещей"),
+        default=1,
+    )
+
+
 class Product(BaseModel):
     class SexChoice(models.TextChoices):
         MAN = _("man")
@@ -116,9 +141,9 @@ class Product(BaseModel):
 
     title = models.CharField(
         verbose_name=_("название"),
-        max_length=150,
-        unique=True,
+        max_length=100,
     )
+    care = models.CharField(verbose_name=_("уход"), max_length=150)
     description = models.TextField(
         verbose_name=_("описание"),
     )
@@ -142,6 +167,7 @@ class Product(BaseModel):
     brand = models.ForeignKey(
         Brand,
         models.CASCADE,
+        null=True,
         verbose_name=_("бренд"),
         db_index=True,
     )
@@ -151,51 +177,11 @@ class Product(BaseModel):
         choices=SexChoice.choices,
         db_index=True,
         blank=True,
+        null=True,
     )
-
     info_tags = models.ManyToManyField(
         ProductInfoTags,
-        null=True,
     )
 
     def __str__(self):
         return self.title
-
-
-# class OrderProduct(models.Model):
-#     customer = models.ForeignKey(
-#         User,
-#         on_delete=models.CASCADE,
-#     )
-#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-#     object_id = models.PositiveIntegerField()
-#     content_object = GenericForeignKey("content_type", "object_id")
-#     quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
-#     order = models.ForeignKey(
-#         "Order",
-#         on_delete=models.CASCADE,
-#         related_name="products",
-#     )
-#
-#     def get_content_type_repr(self):
-#         return str(self.content_type).split("|")[1]
-#
-#     def __str__(self):
-#         return f"{self.customer} {self.get_content_type_repr()} id:{self.object_id}"
-#
-#
-# class Order(models.Model):
-#     customer = models.ForeignKey(
-#         User,
-#         models.CASCADE,
-#     )
-#     ordered_date = models.DateTimeField()
-#     ordered = models.BooleanField()
-#
-#     def __str__(self):
-#         return f"{self.customer.email}: " + ", ".join(
-#             map(
-#                 lambda item: item.get_content_type_repr() + f" id:{item.object_id}",
-#                 self.products.all()[:3],
-#             )
-#         )

@@ -1,84 +1,129 @@
+from dataclasses import dataclass
+
 from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand, call_command
 
-from main.models import Brand, Category, Product
+from main.models import Brand, Category, Product, ProductInfoTags
+
+
+@dataclass
+class ProductWithInfo:
+    product: Product
+    info_tags_titles: list[str]
+
 
 other_fill_commands = [
     "fillBrands",
     "fillCategories",
+    "fillInfoTags",
 ]
 
 nike_brand = Brand(title="Nike")
-zaporojets_brand = Brand(title="Запорожец Heritage")
-mark_formelle_brand = Brand(title="Mark Formelle")
 pull_n_bear_brand = Brand(title="Pull&Bear")
 adidas_brand = Brand(title="Adidas")
-
+kavu_brand = Brand(title="Kavu")
+gant_brand = Brand(title="GANT")
+ellesse_brand = Brand(title="ellesse")
 
 cap_category = Category(slug="cap")
 hat_category = Category(slug="hat")
 balaklava_category = Category(slug="balaklava")
-
+ushanka_category = Category(slug="ushanka")
 sneakers_category = Category(slug="sneakers")
-
 hoodies_category = Category(slug="hoodies")
+joggers_category = Category(slug="joggers")
 
-
-products = [
-    Product(
-        title="U NSW H86 SWOOSH WASH CAP",
-        price=1899,
-        brand=nike_brand,
-        category=cap_category,
-        image="U NSW H86 SWOOSH WASH CAP.webp",
+products_with_info: ProductWithInfo = [
+    ProductWithInfo(
+        Product(
+            title="Черная шапка из искусственного меха Kavu Fud",
+            price=3390.00,
+            description="Плотная ткань\n"
+            "Подкладка из искусственного меха\n"
+            "Основная часть: 50% хлопок, 50% полиэстер.\n",
+            care="Протирать влажной тканевой салфеткой или губкой",
+            sex="man",
+            brand=nike_brand,
+            category=ushanka_category,
+            image="24232596-1-fadedblack.webp",
+        ),
+        [
+            "Последний штрих",
+            "Куполообразный верх",
+            "С отворотом",
+            "С ушами",
+        ],
     ),
-    Product(
-        title="Шапка Ushanka Beanie",
-        price=1890,
-        brand=zaporojets_brand,
-        category=hat_category,
-        image="MP002XU04TC8_16128390_1_v1.jpg",
+    ProductWithInfo(
+        Product(
+            title="Белые высокие кроссовки с красными вставками Pull&Bear Space Jam",
+            brand=pull_n_bear_brand,
+            care="Не стирать в стиральной машине",
+            description="Верх из искусственной кожи\n\n"
+            "Подкладка: 100% полиэстер. Подошва: 100% резина. Верх: 76% полиуретан, 24% резина.",
+            price=2490.00,
+            category=sneakers_category,
+            image="201114408-1-multi.jpeg",
+        ),
+        [
+            "Так и просятся в корзину покупок",
+            "Дизайн Space Jam",
+            "Высокий дизайн",
+            "Вспомогательные петли для легкого надевания",
+            "На шнуровке",
+            "Язычок и задник с мягкими вставками",
+            "Прочная резиновая подошва снаружи",
+            "Рифленая подошва",
+        ],
     ),
-    Product(
-        title="Балаклава Mark",
-        price=599,
-        brand=mark_formelle_brand,
-        category=balaklava_category,
-        image="MP002XU04QHK_15883563_1_v1.webp",
+    ProductWithInfo(
+        Product(
+            title="Джоггеры для дома в темно-синюю и зеленую полоску с контрастным поясом с логотипом GANT",
+            brand=gant_brand,
+            price=4090.00,
+            care="Машинная стирка согласно инструкции на этикетке",
+            sex="man",
+            category=joggers_category,
+            image="200784071-1-navy.webp",
+            description="Невесомый хлопок\n"
+            "GANT гордится участием в проекте The Better Cotton Initiative\n"
+            "Улучшенный хлопок поставляется через систему Mass Balance.",
+        ),
+        [
+            "Из подборки экологичной моды",
+            "В полоску",
+            "Эластичный пояс с логотипом бренда",
+            "Боковые карманы",
+            "Прямой крой",
+        ],
     ),
-    Product(
-        title="Кросовки Pull&Bear",
-        brand=pull_n_bear_brand,
-        price=1999,
-        category=sneakers_category,
-        image="IX001XM00DKS_14953164_1_v1.jpeg",
-    ),
-    Product(
-        title="Кроссовки FIREWALKER",
-        brand=adidas_brand,
-        price=8999,
-        category=sneakers_category,
-        image="RTLAAY648701_15955535_1_v1.jpg",
-    ),
-    Product(
-        title="Худи Pull&Bear",
-        brand=pull_n_bear_brand,
-        price=2299,
-        category=hoodies_category,
-        image="IX001XM00EG4_15401957_1_v1.jpeg",
-    ),
-    Product(
-        title="Футболка PnB",
-        brand=pull_n_bear_brand,
-        price=599,
-        category=hoodies_category,
-        image="IX001XM00DIF_14919549_1_v2.webp",
+    ProductWithInfo(
+        Product(
+            title="Черная укороченная куртка ellesse",
+            brand=ellesse_brand,
+            price=2590.00,
+            sex="woman",
+            care="Машинная стирка согласно инструкции на этикетке",
+            category=hoodies_category,
+            image="23521746-2.webp",
+            description="Мягкая саржа\n"
+            "Легкий фактурный материал в параллельный рубчик\n"
+            "Основная часть: 100% хлопок.",
+        ),
+        [
+            "Эксклюзивно для ASOS 4505",
+            "Широкий воротник",
+            "Застежка на кнопки",
+            "Вышивка логотипа на груди",
+            "Укороченная длина",
+            "Классическая крой",
+        ],
     ),
 ]
 
 
 class Command(BaseCommand):
-    help = f"Fills the database with the following products: {products}"
+    help = f"Fills the database with the following products: {products_with_info}"
 
     def handle(self, *args, **options):
         for command in other_fill_commands:
@@ -88,13 +133,19 @@ class Command(BaseCommand):
             product.category = Category.objects.get(slug=product.category.slug)
             product.brand = Brand.objects.get(title=product.brand.title)
 
-        for product in products:
-            prepare_product(product)
+        for product_with_info in products_with_info:
+            prepare_product(product_with_info.product)
             try:
-                product.validate_unique()
+                product_with_info.product.validate_unique()
             except ValidationError:
                 continue
 
-            product.save()
+            product_with_info.product.save()
+            product_with_info.product.info_tags.set(
+                map(
+                    lambda info_title: ProductInfoTags.objects.get(title=info_title),
+                    product_with_info.info_tags_titles,
+                )
+            )
 
         self.stdout.write(self.style.SUCCESS("Successfully filled products"))

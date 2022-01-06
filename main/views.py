@@ -22,12 +22,13 @@ class IndexView(PageViewMixin, ListView):
 
 class SexView(PageViewMixin, ListView):
     template_name = "main/product_list.html"
+    context_object_name = "products"
 
     def get_title(self):
         if is_valid_sex_name(self.kwargs["sex"]):
             return str(self.kwargs["sex"]).capitalize()
 
-        return self.page_title
+        return super().get_title()
 
     def get_queryset(self):
         sex = self.kwargs["sex"]
@@ -88,7 +89,7 @@ class CategoryView(PageViewMixin, ListView):
             raise Http404("invalid sex name")
 
         product_service = ProductService()
-        category = Category.objects.get_or_none(slug=self.kwargs["subcategory_slug"])
+        category = Category.objects.get_or_none(slug=self.kwargs["category_slug"])
         if category is None:
             raise Http404()
 

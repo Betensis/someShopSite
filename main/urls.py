@@ -8,19 +8,19 @@ app_name = "main"
 
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
-    path("sex/<str:sex>/", views.SexView.as_view(), name="sex"),
+    path("<str:sex>/", views.SexView.as_view(), name="sex"),
     path(
-        "sex/<str:sex>/main-category/<slug:main_category_slug>/",
+        "<str:sex>/main-category/<slug:main_category_slug>/",
         views.MainCategoryView.as_view(),
         name="main-category",
     ),
     path(
-        "sex/<str:sex>/category/<slug:category_slug>/",
+        "<str:sex>/category/<slug:category_slug>/",
         views.CategoryView.as_view(),
         name="subcategory",
     ),
     path(
-        "sex/<str:sex>/subcategory/<slug:subcategory_slug>/product-detail/<int:pk>/",
+        "<str:sex>/category/<slug:category_slug>/product-detail/<int:pk>/",
         views.ProductDetailView.as_view(),
         name="product-detail",
     ),

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from enum import Enum, auto
 from typing import Iterable, Type
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
 
 from main.models import Product, MainCategory, Category, Brand
 from main.utils.service.product import is_valid_sex_name, get_image_url_by_name
@@ -20,12 +20,23 @@ class ProductConfig(ABC):
         pass
 
 
+class ProductListConfig(ProductConfig):
+    @classmethod
+    def get_config(cls):
+        return {
+            cls.Settings.SELECT_RELATED_FIELDS: [],
+            cls.Settings.PREFETCH_RELATED_FIELDS: [],
+            cls.Settings.SELECTED_VALUES: [],
+        }
+
+
 class ProductService:
     IMAGE_FIELD_NAME = "image"
     IMAGE_URL_FIELD_NAME = "image_url"
 
     def __init__(self, config: Type[ProductConfig] = None):
         self.__filter_options_dict = {}
+        self.__filter_options_list = []
         if config is None:
             self.__select_related_fields = []
             self.__prefetch_related_fields = []
@@ -46,12 +57,17 @@ class ProductService:
         if selected_values is None:
             self.__selected_values.extend(selected_values)
 
-    def sex(self, sex_name: Product.SexChoice) -> "ProductService":
+    def sex(
+        self, sex_name: Product.SexChoice, include_nulls: bool = True
+    ) -> "ProductService":
         if not is_valid_sex_name(sex_name):
             raise ValueError(
                 f"Invalid sex name. Expected: {Product.SexChoice.values}. Now: {sex_name}"
             )
-        return self.__set_filter_options(sex=sex_name, sex__isnull=True)
+        if include_nulls:
+            return self.__set_filter_options(Q(sex=sex_name) | Q(sex__isnull=True))
+
+        return self.__set_filter_options(sex=sex_name)
 
     def main_category(self, main_category: MainCategory) -> "ProductService":
         return self.__set_filter_options(category__main_category=main_category)
@@ -83,7 +99,9 @@ class ProductService:
         return self
 
     def get_products(self) -> QuerySet[Product]:
-        products = Product.objects.filter(**self.__filter_options_dict)
+        products = Product.objects.filter(
+            *self.__filter_options_list, **self.__filter_options_dict
+        )
 
         if self.__prefetch_related_fields:
             products = products.prefetch_related(*self.__prefetch_related_fields)
@@ -95,7 +113,8 @@ class ProductService:
         products = self.__add_image_url_fields(products)
         return products
 
-    def __set_filter_options(self, **kwargs) -> "ProductService":
+    def __set_filter_options(self, *args, **kwargs) -> "ProductService":
+        self.__filter_options_list.extend(args)
         self.__filter_options_dict.update(kwargs)
         return self
 
