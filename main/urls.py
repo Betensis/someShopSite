@@ -8,6 +8,7 @@ app_name = "main"
 
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
+    path("sex/<sex:str>", views.SexView.as_view(), name="sex"),
     path(
         "sex/<str:sex>/main-category/<slug:main_category_slug>/",
         views.MainCategoryView.as_view(),

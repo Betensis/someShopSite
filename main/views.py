@@ -12,10 +12,29 @@ from .services.product import ProductService
 class IndexView(PageViewMixin, ListView):
     template_name = "main/index.html"
     context_object_name = "products"
-    page_title = "SomeShopSite"
 
     def get_queryset(self):
         return ProductService().get_products()
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs) | self.get_page_context_data()
+
+
+class SexView(PageViewMixin, ListView):
+    template_name = "main/product_list.html"
+
+    def get_title(self):
+        if is_valid_sex_name(self.kwargs["sex"]):
+            return str(self.kwargs["sex"]).capitalize()
+
+        return self.page_title
+
+    def get_queryset(self):
+        sex = self.kwargs["sex"]
+        if not is_valid_sex_name(sex):
+            raise Http404()
+
+        return ProductService().sex(sex).get_products()
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
