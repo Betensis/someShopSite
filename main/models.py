@@ -127,6 +127,7 @@ class Product(BaseModel):
         decimal_places=2,
         default_currency="RUB",
         max_digits=14,
+        db_index=True,
     )
     category = models.ForeignKey(
         Category,
@@ -154,6 +155,7 @@ class Product(BaseModel):
 
     info_tags = models.ManyToManyField(
         ProductInfoTags,
+        null=True,
     )
 
     def __str__(self):
