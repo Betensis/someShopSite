@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView
 
 from core.services import PageViewMixin
 from main.utils.service.product import is_valid_sex_name
+from .config.product import ProductServiceListConfig
 from .models import MainCategory, Category, Product
 from .services.product import ProductService
 
@@ -14,7 +15,7 @@ class IndexView(PageViewMixin, ListView):
     context_object_name = "products"
 
     def get_queryset(self):
-        return ProductService().get_products()
+        return ProductService(ProductServiceListConfig).get_products()
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
@@ -35,7 +36,11 @@ class SexView(PageViewMixin, ListView):
         if not is_valid_sex_name(sex):
             raise Http404()
 
-        return ProductService().sex(sex).get_products()
+        return (
+            ProductService(ProductServiceListConfig)
+            .sex(sex)
+            .get_products()
+        )
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
@@ -69,7 +74,7 @@ class MainCategoryView(PageViewMixin, ListView):
         if main_category is None:
             raise Http404()
 
-        return product_service.sex(sex).main_category(main_category).get_products()
+        return product_service.set_config(ProductServiceListConfig).sex(sex).main_category(main_category).get_products()
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
@@ -94,7 +99,7 @@ class CategoryView(PageViewMixin, ListView):
             raise Http404()
 
         self.category = category
-        return product_service.sex(sex).category(category).get_products()
+        return product_service.set_config(ProductServiceListConfig).sex(sex).category(category).get_products()
 
     def get_title(self):
         if self.category is None:
