@@ -142,15 +142,3 @@ class ProductDetailView(PageViewMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
-
-
-class KidsView(PageViewMixin, ListView):
-    template_name = "main/product_list.html"
-    context_object_name = "products"
-    page_title = "Детская одежда"
-
-    def get_queryset(self):
-        return ProductService().for_kids(True).get_products()
-
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs) | self.get_page_context_data()
