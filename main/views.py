@@ -36,11 +36,7 @@ class SexView(PageViewMixin, ListView):
         if not is_valid_sex_name(sex):
             raise Http404()
 
-        return (
-            ProductService(ProductServiceListConfig)
-            .sex(sex)
-            .get_products()
-        )
+        return ProductService(ProductServiceListConfig).sex(sex).get_products()
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
@@ -74,7 +70,12 @@ class MainCategoryView(PageViewMixin, ListView):
         if main_category is None:
             raise Http404()
 
-        return product_service.set_config(ProductServiceListConfig).sex(sex).main_category(main_category).get_products()
+        return (
+            product_service.set_config(ProductServiceListConfig)
+            .sex(sex)
+            .main_category(main_category)
+            .get_products()
+        )
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
@@ -99,7 +100,12 @@ class CategoryView(PageViewMixin, ListView):
             raise Http404()
 
         self.category = category
-        return product_service.set_config(ProductServiceListConfig).sex(sex).category(category).get_products()
+        return (
+            product_service.set_config(ProductServiceListConfig)
+            .sex(sex)
+            .category(category)
+            .get_products()
+        )
 
     def get_title(self):
         if self.category is None:
