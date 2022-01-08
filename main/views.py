@@ -120,18 +120,7 @@ class ProductDetailView(PageViewMixin, DetailView):
         self.product: Optional[Product] = None
 
     def get_queryset(self):
-        sex = self.kwargs["sex"]
-        if not is_valid_sex_name(sex):
-            raise Http404("invalid sex name")
-
-        category = Category.objects.get_or_none(slug=self.kwargs["category_slug"])
-
-        if category is None:
-            raise Http404()
-
-        products = ProductService().sex(sex).category(category)
-
-        return products
+        return ProductService().get_products()
 
     def get_object(self, queryset=None):
         product = super(ProductDetailView, self).get_object(queryset)

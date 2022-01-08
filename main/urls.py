@@ -20,7 +20,7 @@ urlpatterns = [
         name="subcategory",
     ),
     path(
-        "<str:sex>/category/<slug:category_slug>/product-detail/<int:pk>/",
+        "product-detail/<int:pk>/",
         views.ProductDetailView.as_view(),
         name="product-detail",
     ),
