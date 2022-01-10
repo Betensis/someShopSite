@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Model
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
 
@@ -110,30 +111,6 @@ class ProductInfoTags(BaseModel):
         return self.title
 
 
-class Warehouse(BaseModel):
-    class SizeChoice(models.TextChoices):
-        XXS = "XXS"
-        XS = "XS"
-        S = "S"
-        M = "M"
-        L = "L"
-
-    product = models.ForeignKey(
-        "Product",
-        models.CASCADE,
-    )
-    product_size = models.CharField(
-        choices=SizeChoice.choices,
-        verbose_name=_("размер вещи"),
-        max_length=8,
-        null=True,
-    )
-    product_quantity = models.PositiveIntegerField(
-        verbose_name=_("количество вещей"),
-        default=1,
-    )
-
-
 class Product(BaseModel):
     class SexChoice(models.TextChoices):
         MAN = _("man")
@@ -185,3 +162,32 @@ class Product(BaseModel):
 
     def __str__(self):
         return self.title
+
+
+class ProductWarehouseInfo(BaseModel):
+    class SizeChoice(models.TextChoices):
+        XXS = "XXS"
+        XS = "XS"
+        S = "S"
+        M = "M"
+        L = "L"
+        XL = "XL"
+        XXL = "XXL"
+
+    product = models.ForeignKey(
+        "Product",
+        models.CASCADE,
+    )
+    product_size = models.CharField(
+        choices=SizeChoice.choices,
+        verbose_name=_("размер вещи"),
+        max_length=8,
+        null=True,
+    )
+    product_quantity = models.PositiveIntegerField(
+        verbose_name=_("количество вещей"),
+        default=1,
+    )
+
+    def __str__(self):
+        return str(self.product) + ": " + self.product_size

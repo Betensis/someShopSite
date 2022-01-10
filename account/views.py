@@ -10,7 +10,6 @@ from core.services import PageViewMixin
 class AccountLoginView(LoginView, PageViewMixin):
     template_name = "account/login.html"
     form_class = AccountLoginForm
-    success_url = settings.LOGIN_REDIRECT_URL
     redirect_authenticated_user = False
 
     def get_context_data(self, **kwargs):
@@ -32,7 +31,6 @@ class AccountCreationView(FormView, PageViewMixin):
 
 
 class AccountLogoutView(LogoutView, PageViewMixin):
-    next_page = settings.LOGOUT_REDIRECT_URL
     template_name = "account/logout.html"
     page_title = "Logout"
 

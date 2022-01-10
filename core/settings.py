@@ -43,7 +43,7 @@ INTERNAL_IPS = [
 
 # Application definition
 
-APPS = ["main", "account"]
+APPS = ["main", "account", "cart"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -53,8 +53,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "djmoney",
-    "debug_toolbar",
 ] + APPS
+
+if DEBUG:
+    INSTALLED_APPS.append("debug_toolbar")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -64,8 +66,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+if DEBUG:
+    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 ROOT_URLCONF = "core.urls"
 
@@ -163,6 +166,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 LOGIN_REDIRECT_URL = reverse_lazy("main:index")
 LOGOUT_REDIRECT_URL = reverse_lazy("main:index")
+
+LOGIN_URL = reverse_lazy("account:login")
+LOGOUT_URL = reverse_lazy("account:logout")
 
 AUTH_USER_MODEL = "account.Account"
 

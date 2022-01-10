@@ -33,7 +33,7 @@ sneakers_category = Category(slug="sneakers")
 hoodies_category = Category(slug="hoodies")
 joggers_category = Category(slug="joggers")
 
-products_with_info: ProductWithInfo = [
+products_with_info: list[ProductWithInfo] = [
     ProductWithInfo(
         Product(
             title="Черная шапка из искусственного меха Kavu Fud",

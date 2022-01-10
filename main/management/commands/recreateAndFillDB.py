@@ -7,3 +7,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         call_command("recreateDB")
         call_command("fillProducts")
+        call_command("fillProductWarehouseInfos")

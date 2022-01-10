@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from .models import MainCategory, Category, Brand, Product, ProductInfoTags
+from .models import (
+    MainCategory,
+    Category,
+    Brand,
+    Product,
+    ProductInfoTags,
+    ProductWarehouseInfo,
+)
 
 
 @admin.register(MainCategory)
@@ -34,6 +41,7 @@ class BrandAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = [
+        "pk",
         "title",
         "price",
         "category",
@@ -56,3 +64,8 @@ class ProductInfoTagAdmin(admin.ModelAdmin):
     list_display = [
         "title",
     ]
+
+
+@admin.register(ProductWarehouseInfo)
+class WarehouseAdmin(admin.ModelAdmin):
+    list_display = ["product", "product_size", "product_quantity"]

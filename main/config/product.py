@@ -23,5 +23,5 @@ class ProductServiceListConfig(ProductServiceConfig):
         return {
             cls.Settings.SELECT_RELATED_FIELDS: ["brand"],
             cls.Settings.PREFETCH_RELATED_FIELDS: [],
-            cls.Settings.SELECTED_VALUES: ['pk', "title", "brand__title", "image"],
+            cls.Settings.SELECTED_VALUES: ["pk", "title", "brand__title", "image"],
         }
