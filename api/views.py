@@ -1,17 +1,18 @@
-from django.http import JsonResponse
 from ninja import NinjaAPI
+from ninja.security import django_auth
 
 from api.errors import warehouse
-from api.errors.warehouse import create_errors_report_dict
-from api.schemas.base import SuccessJsonResponse, BaseJsonResponse, FailJsonResponse
+from api.schemas.base import SuccessJsonResponse, FailJsonResponse
 from api.schemas.cart import CartProductScheme
-from main.models import ProductWarehouseInfo
-from main.services import ProductWarehouseInfoService, ProductService
+from cart.services import CartService
+from main.services import ProductWarehouseInfoService
 
-api = NinjaAPI()
+api = NinjaAPI(csrf=True)
+
+cart_api_prefix = "/cart/"
 
 
-@api.post("/add-products")
+@api.post(cart_api_prefix + "add-products", auth=django_auth)
 def add_product_view(request, cart_product: CartProductScheme):
     product_warehouse_info = (
         ProductWarehouseInfoService().get_or_none_product_warehouse_info(
@@ -25,5 +26,7 @@ def add_product_view(request, cart_product: CartProductScheme):
             )
         )
         return api.create_response(request, fail_response, status=404)
+
+    CartService().add_product(request.user, product_warehouse_info)
 
     return SuccessJsonResponse()

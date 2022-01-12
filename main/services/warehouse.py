@@ -1,8 +1,11 @@
 from typing import Iterable
 
+from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 
 from main.models import ProductWarehouseInfo, Product
+
+User = get_user_model()
 
 
 class ProductWarehouseInfoService:
