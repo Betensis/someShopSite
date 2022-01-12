@@ -6,7 +6,8 @@ from django.views.generic import ListView, DetailView
 from core.services import PageViewMixin
 from main.utils.service.product import is_valid_sex_name
 from .config.product import ProductServiceListConfig
-from .models import MainCategory, Category, Product
+from .models import MainCategory, Category, Product, ProductWarehouseInfo
+from .services import ProductWarehouseInfoService
 from .services.product import ProductService
 
 
@@ -120,17 +121,24 @@ class CategoryView(PageViewMixin, ListView):
 class ProductDetailView(PageViewMixin, DetailView):
     template_name = "main/product_detail.html"
     context_object_name = "product"
+    product_sizes_context_name = "product_sizes"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.product: Optional[Product] = None
+        self.product_sizes: Optional[list[ProductWarehouseInfo.SizeChoice]] = None
 
     def get_queryset(self):
         return ProductService().get_products()
 
     def get_object(self, queryset=None):
         product = super(ProductDetailView, self).get_object(queryset)
+        product_warehouse_info_service = ProductWarehouseInfoService()
+
         self.product = product
+        self.product_sizes = product_warehouse_info_service.get_sizes_by_product(
+            product
+        )
 
         return product
 
@@ -141,4 +149,7 @@ class ProductDetailView(PageViewMixin, DetailView):
         return self.product.category.title + ": " + self.product.title
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs) | self.get_page_context_data()
+        context = super().get_context_data(**kwargs) | self.get_page_context_data()
+        context[self.product_sizes_context_name] = self.product_sizes
+
+        return context

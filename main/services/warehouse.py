@@ -18,3 +18,12 @@ class ProductWarehouseInfoService:
     def is_product_available(self, product: Product) -> bool:
         warehouses = self.get_warehouses_by_product(product)
         return warehouses.filter(product_quantity__gt=1).exists()
+
+    @staticmethod
+    def get_sizes_by_product(product: Product) -> list[ProductWarehouseInfo.SizeChoice]:
+        return list(
+            map(
+                lambda products_info: products_info["product_size"],
+                product.productwarehouseinfo_set.values("product_size"),
+            )
+        )
