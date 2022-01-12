@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, Optional
 
 from django.db.models import Q, QuerySet
 
@@ -122,3 +122,7 @@ class ProductService:
                 )
 
         return products
+
+    @staticmethod
+    def get_product_or_none(**kwargs) -> Optional[Product]:
+        return Product.objects.get_or_none(**kwargs)

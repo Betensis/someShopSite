@@ -41,10 +41,6 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-# Application definition
-
-APPS = ["main", "account", "cart"]
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -53,8 +49,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "djmoney",
-] + APPS
-
+    "main",
+    "account",
+    "cart",
+    "api",
+]
 if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
 
@@ -95,25 +94,12 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = (
-    {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
-    if DEBUG
-    else {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": env.get_str("DB_NAME"),
-            "USER": env.get_str("DB_USER"),
-            "PASSWORD": env.get_str("DB_PASSWORD"),
-            "HOST": env.get_str("DB_HOST"),
-            "PORT": env.get_int("DB_POST", 5432),
-        }
-    }
-)
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

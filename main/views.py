@@ -136,8 +136,8 @@ class ProductDetailView(PageViewMixin, DetailView):
         product_warehouse_info_service = ProductWarehouseInfoService()
 
         self.product = product
-        self.product_sizes = product_warehouse_info_service.get_sizes_by_product(
-            product
+        self.product_sizes = (
+            product_warehouse_info_service.get_allowed_sizes_by_product(product)
         )
 
         return product

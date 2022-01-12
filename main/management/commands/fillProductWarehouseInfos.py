@@ -4,7 +4,6 @@ from django.core.management import BaseCommand
 
 from main.models import ProductWarehouseInfo, Product
 
-
 SexChoice = ProductWarehouseInfo.SizeChoice
 
 

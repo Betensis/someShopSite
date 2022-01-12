@@ -4,17 +4,15 @@ from django.contrib.auth import get_user_model
 from django.db.models import QuerySet, Sum
 
 from cart.models import Cart
-from main.models import Product, ProductWarehouseInfo
+from main.models import ProductWarehouseInfo
 from main.services import ProductWarehouseInfoService
 
 User = get_user_model()
 
 
 class CartService:
-    _model = Cart
-
     def get_products_count_from_current_cart(self, user: User):
-        cart = self._model.objects.get_or_none(user=user)
+        cart = Cart.objects.get_or_none(user=user)
         if cart is None:
             return 0
         return cart.products_warehouse_info.all().count()
@@ -23,10 +21,10 @@ class CartService:
         """
         :return: current cart (cart with is_bought attr equals False) or None
         """
-        return self._model.objects.get_or_none(user=user)
+        return Cart.objects.get_or_none(user=user)
 
     def get_or_create_cart(self, user: User) -> tuple[Cart, bool]:
-        return self._model.objects.get_or_create(user=user)
+        return Cart.objects.get_or_create(user=user)
 
     @staticmethod
     def add_product_to_cart(cart: Cart, product_info: ProductWarehouseInfo):
@@ -52,7 +50,7 @@ class CartService:
         if cart is None:
             if not create_cart_if_not_exist:
                 raise ValueError(f"Cart doesnt exist and {create_cart_if_not_exist = }")
-            cart = self._model.objects.create(user=user)
+            cart = Cart.objects.create(user=user)
 
         return self.add_product_to_cart(cart, product_info)
 

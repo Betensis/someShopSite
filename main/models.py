@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Model
-from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
 

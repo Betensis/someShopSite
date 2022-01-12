@@ -27,3 +27,24 @@ class ProductWarehouseInfoService:
                 product.productwarehouseinfo_set.values("product_size"),
             )
         )
+
+    @staticmethod
+    def get_allowed_sizes_by_product(
+        product: Product,
+    ) -> list[ProductWarehouseInfo.SizeChoice]:
+        return list(
+            map(
+                lambda products_info: products_info["product_size"],
+                product.productwarehouseinfo_set.filter(product_quantity__gt=0).values(
+                    "product_size"
+                ),
+            )
+        )
+
+    @staticmethod
+    def get_or_none_product_warehouse_info(
+        product_pk: int, size: ProductWarehouseInfo.SizeChoice
+    ):
+        return ProductWarehouseInfo.objects.get_or_none(
+            product__pk=product_pk, product_size=size
+        )

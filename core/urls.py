@@ -17,6 +17,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from api.views import api
 from core import settings
 
 urlpatterns = [
@@ -24,6 +25,7 @@ urlpatterns = [
     path("", include("main.urls", "main")),
     path("account/", include("account.urls", "account")),
     path("cart/", include("cart.urls", "cart")),
+    path("api/", api.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

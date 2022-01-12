@@ -1,2 +1,2 @@
-from .warehouse import ProductWarehouseInfoService
 from .product import ProductService
+from .warehouse import ProductWarehouseInfoService
