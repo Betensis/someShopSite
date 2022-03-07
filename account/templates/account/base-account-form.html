@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'account/form.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="account-form-wrapper">
+        {% block account-form %}
+        {% endblock %}
+    </div>
+{% endblock %}

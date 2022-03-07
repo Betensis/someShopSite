@@ -37,6 +37,12 @@ ALLOWED_HOSTS = [
     env.get_str("ALLOWED_HOST", ""),
 ]
 
+APPS = [
+    "main",
+    "account",
+    "cart",
+]
+
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
@@ -49,11 +55,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "djmoney",
-    "main",
-    "account",
-    "cart",
-    "api",
-]
+] + APPS
 if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
 
@@ -138,7 +140,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "static"
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "main/static"),
+    BASE_DIR / "main/static",
 ]
 
 # Default primary key field type

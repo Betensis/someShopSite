@@ -1,10 +1,23 @@
-{% extends 'base.html' %}
-{% block body %}
+{% extends 'account/base-account-form.html' %}
+
+{% block account-form %}
+    <div class="form-title">
+        <p>Зарегистрироваться</p>
+    </div>
     <form action="{% url 'account:signup' %}" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">
-            Зарегаться
-        </button>
+        <div class="field">
+            <label for="email" class="field__label">Email</label>
+            <input name="email" type="email" id="email" class="field__input">
+        </div>
+        <div class="field">
+            <label for="password1" class="field__label">Пароль</label>
+            <input name="password1" type="password" id="password1" class="field__input">
+        </div>
+        <div class="field">
+            <label for="password2" class="field__label">Повторите пароль</label>
+            <input name="password2" type="password" id="password2" class="field__input">
+        </div>
+        <input class="form-submit-btn" type="submit" value="Зарегистрироваться">
     </form>
 {% endblock %}

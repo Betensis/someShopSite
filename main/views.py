@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView
 
 from core.services import PageViewMixin
 from main.utils.service.product import is_valid_sex_name
-from .config.product import ProductServiceListConfig
+from .config.product import ProductServiceListConfig, ProductServiceDetailConfig
 from .models import MainCategory, Category, Product, ProductWarehouseInfo
 from .services import ProductWarehouseInfoService
 from .services.product import ProductService
@@ -129,15 +129,14 @@ class ProductDetailView(PageViewMixin, DetailView):
         self.product_sizes: Optional[list[ProductWarehouseInfo.SizeChoice]] = None
 
     def get_queryset(self):
-        return ProductService().get_products()
+        return ProductService().set_config(ProductServiceDetailConfig).get_products()
 
     def get_object(self, queryset=None):
         product = super(ProductDetailView, self).get_object(queryset)
-        product_warehouse_info_service = ProductWarehouseInfoService()
 
         self.product = product
-        self.product_sizes = (
-            product_warehouse_info_service.get_allowed_sizes_by_product(product)
+        self.product_sizes = ProductWarehouseInfoService().get_allowed_sizes_by_product(
+            product
         )
 
         return product

@@ -63,7 +63,7 @@ products_with_info: list[ProductWithInfo] = [
             "Подкладка: 100% полиэстер. Подошва: 100% резина. Верх: 76% полиуретан, 24% резина.",
             price=2490.00,
             category=sneakers_category,
-            image="201114408-1-multi.jpeg",
+            image="201114163-1-multi.webp",
         ),
         [
             "Так и просятся в корзину покупок",
@@ -105,7 +105,7 @@ products_with_info: list[ProductWithInfo] = [
             sex="woman",
             care="Машинная стирка согласно инструкции на этикетке",
             category=hoodies_category,
-            image="23521746-2.webp",
+            image="200329534-1-black.webp",
             description="Мягкая саржа\n"
             "Легкий фактурный материал в параллельный рубчик\n"
             "Основная часть: 100% хлопок.",

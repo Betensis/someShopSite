@@ -1,1 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'main/css/product.css' %}">
+{% endblock %}
+
+{% block body %}
+    {% include 'main/_inc/products.html' %}
+{% endblock %}

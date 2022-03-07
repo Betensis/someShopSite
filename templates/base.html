@@ -8,11 +8,19 @@
             {{ title }}
         {% endblock title %}
     </title>
+    <link rel="stylesheet" href="{% static '/main/css/reset.css' %}">
+    <link rel="stylesheet" href="{% static '/main/css/header.css' %}">
+    <link rel="stylesheet" href="{% static '/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    {% block links %}
+    {% endblock %}
 </head>
 <body>
 {% include "_inc/header.html" %}
 {% block body %}
 {% endblock body %}
 {% include "_inc/footer.html" %}
+{% block js_register %}
+{% endblock %}
 </body>
 </html>

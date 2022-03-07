@@ -1,19 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'main/css/product.css' %}">
+{% endblock %}
+
 {% block body %}
-    {% if user.is_authenticated %}
-        <a href="{% url 'account:logout' %}">logout</a>
-    {% else %}
-        <a href="{% url 'account:login' %}"> login</a>
-        <a href="{% url 'account:signup' %}">sing up</a>
-    {% endif %}
-    {% for product in products %}
-        <div style="display: flex; width: 100%; flex-direction: row;">
-            <p>{{ product.title }}</p>
-            {% if product.image %}
-                <img src="{{ product.image.url }}" height="250" width="250" alt="">
-            {% endif %}
-            <p>{{ product.sex }}</p>
-            <p style="width: 150px; color: brown">{{ product.brand }}</p>
-        </div>
-    {% endfor %}
+    {% include 'main/_inc/products.html' %}
 {% endblock %}

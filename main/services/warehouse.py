@@ -44,10 +44,20 @@ class ProductWarehouseInfoService:
             )
         )
 
+    def get_allowed_sizes_by_product_id(self, product_id: int):
+        return list(
+            map(
+                lambda products_info: products_info["product_size"],
+                self._model.objects.filter(
+                    product_quantity__gt=0, product_id=product_id
+                ).values("product_size"),
+            )
+        )
+
     @staticmethod
     def get_or_none_product_warehouse_info(
-        product_pk: int, size: ProductWarehouseInfo.SizeChoice
+        product_id: int, size: ProductWarehouseInfo.SizeChoice
     ):
         return ProductWarehouseInfo.objects.get_or_none(
-            product__pk=product_pk, product_size=size
+            product__pk=product_id, product_size=size
         )

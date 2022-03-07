@@ -1,7 +1,93 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load djmoney %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static '/main/css/product-detail.css' %}">
+{% endblock %}
+
 {% block body %}
-    <p>{{ product }}</p>
-    {% if product.img %}
-        <img src="{{ product.image_url }}" height="250" width="500" alt="">
-    {% endif %}
+    <div class="product-detail-container">
+        <div class="product-main-info">
+            <div class="product-main-info__img">
+                <img src="{{ product.image.url }}" alt="...">
+            </div>
+            <div class="product-main-info__data">
+                <div class="product-main-info__title">
+                    <p>
+                        {{ product.title }}
+                    </p>
+                </div>
+                <div class="product-main-info__price">
+                    <p>{% money_localize product.price %}</p>
+                </div>
+                <div class="product-size-container">
+                    <div class="product-size__title">
+                        <p>Доступные размеры:</p>
+                    </div>
+                    {% csrf_token %}
+                    {% for size in product_sizes %}
+                        <div class="form-check">
+                            <input class="form-check-input js-product-size-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label js-product-size-value" for="flexRadioDefault1">
+                                {{ size }}
+                            </label>
+                        </div>
+                    {% empty %}
+                        <p>Извините. Нет доступных сейчас размеров</p>
+                    {% endfor %}
+                </div>
+                <button class="product-submit js-add-product-to-cart">Добавить в корзину</button>
+            </div>
+        </div>
+        <div class="product-info-detail-container">
+            <div class="detail-info-col">
+                <div class="detail-info-title">
+                    <p>Детальная информация</p>
+                </div>
+                <div class="detail-info-content">
+                    <ul>
+                        {% for info_tag in product.info_tags.all %}
+                            <li>{{ info_tag.title }}</li>
+                        {% endfor %}
+                        
+                    </ul>
+                </div>
+            </div>
+            <div class="detail-info-col">
+                <div class="detail-info-title">
+                    <p>Код товара</p>
+                </div>
+                <div class="detail-info-content js-product-code">
+                    <p>{{ product.pk }}</p>
+                </div>
+                <div class="detail-info-title">
+                    <p>Брэнд</p>
+                </div>
+                <div class="detail-info-content">
+                    <p>{{ product.brand.description }}</p>
+                </div>
+            </div>
+            <div class="detail-info-col">
+                <div class="detail-info-title">
+                    <p>Как заботиться</p>
+                </div>
+                <div class="detail-info-content">
+                    <p>{{ product.care }}</p>
+                </div>
+                <div class="detail-info-title">
+                    <p>Обо мне</p>
+                </div>
+                <div class="detail-info-content">
+                    <p>{{ product.description|linebreaks }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_register %}
+    <script src="{% static 'main/js/lib/csrf.js' %}" type="module"></script>
+    <script src="{% static 'main/js/api/cart.js' %}" type="module"></script>
+    <script src="{% static 'main/js/product-detail/index.js' %}" type="module"></script>
 {% endblock %}

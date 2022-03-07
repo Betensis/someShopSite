@@ -10,7 +10,7 @@ class Command(BaseCommand):
         User = get_user_model()
         try:
             User.objects.create_superuser(
-                username="admin", email="admin@mail.com", password="111111"
+                username="admin", email="admin@gmail.com", password="111111"
             )
             self.stdout.write(self.style.SUCCESS("Admin created"))
         except IntegrityError:
