@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Optional
 
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
@@ -57,7 +57,7 @@ class ProductWarehouseInfoService:
     @staticmethod
     def get_or_none_product_warehouse_info(
         product_id: int, size: ProductWarehouseInfo.SizeChoice
-    ):
+    ) -> Optional[ProductWarehouseInfo]:
         return ProductWarehouseInfo.objects.get_or_none(
             product__pk=product_id, product_size=size
         )

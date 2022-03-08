@@ -12,7 +12,7 @@
             <div class="product-main-info__img">
                 <img src="{{ product.image.url }}" alt="...">
             </div>
-            <div class="product-main-info__data">
+            <form method="post" action="{% url 'main:product-detail' product.id %}" class="product-main-info__data">
                 <div class="product-main-info__title">
                     <p>
                         {{ product.title }}
@@ -28,7 +28,7 @@
                     {% csrf_token %}
                     {% for size in product_sizes %}
                         <div class="form-check">
-                            <input class="form-check-input js-product-size-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <input class="form-check-input js-product-size-input" type="radio" value="{{ size }}" name="size" id="flexRadioDefault1">
                             <label class="form-check-label js-product-size-value" for="flexRadioDefault1">
                                 {{ size }}
                             </label>
@@ -37,8 +37,8 @@
                         <p>Извините. Нет доступных сейчас размеров</p>
                     {% endfor %}
                 </div>
-                <button class="product-submit js-add-product-to-cart">Добавить в корзину</button>
-            </div>
+                <button type="submit" class="product-submit js-add-product-to-cart">Добавить в корзину</button>
+            </form>
         </div>
         <div class="product-info-detail-container">
             <div class="detail-info-col">
@@ -87,7 +87,7 @@
 {% endblock %}
 
 {% block js_register %}
-    <script src="{% static 'main/js/lib/csrf.js' %}" type="module"></script>
-    <script src="{% static 'main/js/api/cart.js' %}" type="module"></script>
-    <script src="{% static 'main/js/product-detail/index.js' %}" type="module"></script>
+{#    <script src="{% static 'main/js/lib/csrf.js' %}" type="module"></script>#}
+{#    <script src="{% static 'main/js/api/cart.js' %}" type="module"></script>#}
+{#    <script src="{% static 'main/js/product-detail/index.js' %}" type="module"></script>#}
 {% endblock %}

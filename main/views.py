@@ -2,9 +2,13 @@ from typing import Optional
 
 from django.http import Http404
 from django.views.generic import ListView, DetailView
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from core.services import PageViewMixin
 from main.utils.service.product import is_valid_sex_name
+from cart.services.cart import CartService
 from .config.product import ProductServiceListConfig, ProductServiceDetailConfig
 from .models import MainCategory, Category, Product, ProductWarehouseInfo
 from .services import ProductWarehouseInfoService
@@ -125,8 +129,11 @@ class ProductDetailView(PageViewMixin, DetailView):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.object = None
         self.product: Optional[Product] = None
         self.product_sizes: Optional[list[ProductWarehouseInfo.SizeChoice]] = None
+        self.cart_service = CartService()
+        self.product_warehouse_info_service = ProductWarehouseInfoService()
 
     def get_queryset(self):
         return ProductService().set_config(ProductServiceDetailConfig).get_products()
@@ -150,5 +157,34 @@ class ProductDetailView(PageViewMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) | self.get_page_context_data()
         context[self.product_sizes_context_name] = self.product_sizes
-
+        cart, _ = self.cart_service.get_or_create_cart(self.request.user)
+        context["is_product_added_to_cart"] = any(
+            map(
+                lambda product_info: product_info.product == self.product,
+                self.cart_service.get_all_product_infos_by_cart(cart),
+            )
+        )
         return context
+
+    @method_decorator(login_required)
+    def post(self, request, pk: int):
+        self.object = self.get_object()
+        size = request.POST.get("size")
+        context = self.get_context_data(object=self.object)
+        if size is None:
+            context |= {"errors": ["Выберите размер"]}
+            return render(request, "main/product_detail.html", context)
+
+        warehouse_info = (
+            self.product_warehouse_info_service.get_or_none_product_warehouse_info(
+                pk, size
+            )
+        )
+
+        if warehouse_info is None:
+            context |= {"errors": ["Выбран недоступный размер"]}
+            return render(request, "main/product_detail.html", context)
+
+        self.cart_service.add_product(request.user, warehouse_info)
+
+        return render(request, "main/product_detail.html", context)
