@@ -1,8 +1,12 @@
 from typing import Optional
 
 from django.http import Http404
+from django.urls import reverse
 from django.views.generic import ListView, DetailView
 
+from account.utils.login import redirect_with_next
+from cart.entity.product_info import CartProductInfo
+from cart.services import CartService
 from core.services import PageViewMixin
 from main.utils.service.product import is_valid_sex_name
 from .config.product import ProductServiceListConfig, ProductServiceDetailConfig
@@ -127,6 +131,8 @@ class ProductDetailView(PageViewMixin, DetailView):
         super().__init__(**kwargs)
         self.product: Optional[Product] = None
         self.product_sizes: Optional[list[ProductWarehouseInfo.SizeChoice]] = None
+        self.product_warehouse_info_service = ProductWarehouseInfoService()
+        self.cart_service = CartService()
 
     def get_queryset(self):
         return ProductService().set_config(ProductServiceDetailConfig).get_products()
@@ -135,11 +141,28 @@ class ProductDetailView(PageViewMixin, DetailView):
         product = super(ProductDetailView, self).get_object(queryset)
 
         self.product = product
-        self.product_sizes = ProductWarehouseInfoService().get_allowed_sizes_by_product(
-            product
+        self.product_sizes = (
+            self.product_warehouse_info_service.get_allowed_sizes_by_product(product)
         )
 
         return product
+
+    def post(self, request, pk: int):
+        if not request.user.is_authenticated:
+            return redirect_with_next(reverse("main:product-detail", kwargs={"pk": pk}))
+
+        size = request.POST.get("size")
+        if size is None:
+            return self.get(request, pk)
+
+        product_info = CartProductInfo(product_id=pk, size=size)
+        cart, _ = self.cart_service.get_or_create_cart(self.request)
+        if not self.cart_service.is_product_in_cart(cart, product_info):
+            self.cart_service.add_product(
+                self.request, CartProductInfo(product_id=pk, size=size)
+            )
+
+        return self.get(request, pk)
 
     def get_title(self):
         if self.product is None:

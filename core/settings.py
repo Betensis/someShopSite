@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+from importlib import import_module
 from pathlib import Path
 
 import dotenv
@@ -21,6 +22,8 @@ dotenv.load_dotenv(dotenv_path=Path("core/.env"))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+TMP_DIR = BASE_DIR / "tmp"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -103,6 +106,23 @@ DATABASES = {
     }
 }
 
+CACHES = (
+    {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": env.get_str("REDIS_CONNECTION"),
+        }
+    }
+    if not DEBUG
+    else {
+        "default": {
+            "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+            "LOCATION": TMP_DIR / "cache",
+        }
+    }
+)
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -141,7 +161,10 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "static"
 STATICFILES_DIRS = [
     BASE_DIR / "main/static",
+    BASE_DIR / "vendor/static",
 ]
+
+SessionStore = import_module(SESSION_ENGINE).SessionStore
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

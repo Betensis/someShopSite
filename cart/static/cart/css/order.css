@@ -1,0 +1,27 @@
+.order-product {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.order-product__title p {
+    font-weight: bold;
+}
+
+.order-product__text {
+
+}
+
+.order-product-img img {
+    border-radius: 9px;
+    object-fit: cover;
+    max-height: 150px;
+    min-height: 120px;
+    width: 100px;
+}
+
+.order-product-info {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}

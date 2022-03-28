@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from cart.models import Cart
+from cart.models import Order
 
 
-@admin.register(Cart)
-class CartAdmin(admin.ModelAdmin):
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "user",
-        "is_bought",
+        "status",
     ]

@@ -111,6 +111,10 @@ class ProductInfoTags(BaseModel):
 
 
 class Product(BaseModel):
+    class Meta:
+        verbose_name = _("Продукт")
+        verbose_name_plural = _("Продукты")
+
     class SexChoice(models.TextChoices):
         MAN = _("man")
         WOMAN = _("woman")
@@ -164,6 +168,10 @@ class Product(BaseModel):
 
 
 class ProductWarehouseInfo(BaseModel):
+    class Meta:
+        verbose_name = _("Складская информация о продуктах")
+        verbose_name_plural = _("Складская информация о продуктах")
+
     class SizeChoice(models.TextChoices):
         XXS = "XXS"
         XS = "XS"

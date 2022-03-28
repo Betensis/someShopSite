@@ -61,6 +61,9 @@ class ProductService:
     def brand(self, brand: Brand) -> "ProductService":
         return self.__set_filter_options(brand=brand)
 
+    def ids_in(self, product_ids: list[int]):
+        return self.__set_filter_options(id__in=product_ids)
+
     def _add_select_related_fields(self, *args):
         self.__select_related_fields.extend(*args)
         return self

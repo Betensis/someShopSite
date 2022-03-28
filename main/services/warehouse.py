@@ -3,6 +3,8 @@ from typing import Iterable
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 
+from cart.entity.product_info import CartProductInfo
+from main.exception import ProductNotAvailableException
 from main.models import ProductWarehouseInfo, Product
 
 User = get_user_model()
@@ -10,6 +12,30 @@ User = get_user_model()
 
 class ProductWarehouseInfoService:
     _model = ProductWarehouseInfo
+
+    def get_product_warehouse_info_by_ids_and_size(
+        self, product_infos: Iterable[CartProductInfo]
+    ) -> list[ProductWarehouseInfo]:
+        result = []
+        for product_info in product_infos:
+            result.append(
+                self._model.objects.get(
+                    product_id=product_info.product_id, product_size=product_info.size
+                )
+            )
+
+        return result
+
+    def decrease_product_warehouse_count(
+        self, product_warehouse: ProductWarehouseInfo, amount_offset: int = 1
+    ):
+        if (result_count := product_warehouse.product_quantity - amount_offset) < 0:
+            raise ProductNotAvailableException(
+                f"Product warehouse amount after decrease must be more than 0. Now: {result_count}, "
+                f"product amount: {product_warehouse.product_quantity}, amount_offset: {amount_offset}",
+            )
+        product_warehouse.product_quantity = result_count
+        product_warehouse.save()
 
     @staticmethod
     def get_warehouses_by_product(product: Product) -> QuerySet[ProductWarehouseInfo]:
