@@ -12,7 +12,7 @@
             <div class="product-main-info__img">
                 <img src="{{ product.image.url }}" alt="...">
             </div>
-            <form method="post" action="{% url 'main:product-detail' product.id %}" class="product-main-info__data">
+            <form method="post" class="product-main-info__data">
                 <div class="product-main-info__title">
                     <p>
                         {{ product.title }}
@@ -24,11 +24,22 @@
                 <div class="product-size-container">
                     <div class="product-size__title">
                         <p>Доступные размеры:</p>
-                    </div>
+                    </div>{% block js_register %}
+                    <script src="{% static 'main/js/lib/csrf.js' %}" type="module"></script>
+                    <script src="{% static 'main/js/api/cart.js' %}" type="module"></script>
+                    <script src="{% static 'main/js/product-detail/index.js' %}" type="module"></script>
+                {% endblock %}
                     {% csrf_token %}
                     {% for size in product_sizes %}
                         <div class="form-check">
-                            <input class="form-check-input js-product-size-input" type="radio" value="{{ size }}" name="size" id="flexRadioDefault1">
+                            {% if forloop.first %}
+                                <input class="form-check-input js-product-size-input" value="{{ size }}" checked
+                                       type="radio"
+                                       name="size" id="size-{{ size }}">
+                            {% else %}
+                                <input class="form-check-input js-product-size-input" value="{{ size }}" type="radio"
+                                       name="size" id="size-{{ size }}">
+                            {% endif %}
                             <label class="form-check-label js-product-size-value" for="flexRadioDefault1">
                                 {{ size }}
                             </label>
@@ -50,7 +61,7 @@
                         {% for info_tag in product.info_tags.all %}
                             <li>{{ info_tag.title }}</li>
                         {% endfor %}
-                        
+
                     </ul>
                 </div>
             </div>
@@ -84,10 +95,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block js_register %}
-{#    <script src="{% static 'main/js/lib/csrf.js' %}" type="module"></script>#}
-{#    <script src="{% static 'main/js/api/cart.js' %}" type="module"></script>#}
-{#    <script src="{% static 'main/js/product-detail/index.js' %}" type="module"></script>#}
 {% endblock %}

@@ -1,4 +1,5 @@
 {% load static %}
+{% load cache %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,13 +11,17 @@
     </title>
     <link rel="stylesheet" href="{% static '/main/css/reset.css' %}">
     <link rel="stylesheet" href="{% static '/main/css/header.css' %}">
-    <link rel="stylesheet" href="{% static '/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static '/vendor/bootstrap-5.1.3/css/bootstrap.min.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
     {% block links %}
     {% endblock %}
 </head>
 <body>
-{% include "_inc/header.html" %}
+
+{% cache 86400 header request.user.email %}
+    {# 86400 - один день #}
+    {% include "_inc/header.html" %}
+{% endcache %}
 {% block body %}
 {% endblock body %}
 {% include "_inc/footer.html" %}

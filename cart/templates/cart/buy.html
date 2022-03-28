@@ -1,1 +1,72 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'main/css/message.css' %}">
+    <link rel="stylesheet" href="{% static 'cart/css/order.css' %}">
+{% endblock %}
+
+{% block body %}
+    {% if order %}
+        <div class="message-container">
+            <div class="message-item">
+                <div class="message-item-title">
+                    Спасибо за оформление заказа! Ваш заказ:
+                </div>
+            </div>
+            <div class="message-item">
+                <div class="message-item__text">
+                    Адрес доставки: {{ order.contact_place }}
+                </div>
+            </div>
+            <div class="message-item">
+                <div class="message-item__text">
+                    Телефон: {{ order.contact_phone }}
+                </div>
+            </div>
+            <div class="message-item">
+                <div class="message-item__text">
+                    Email: {{ order.contact_email }}
+                </div>
+            </div>
+            {% for product_warehouse_info in order.products_warehouse_info.all %}
+                <div class="message-item">
+                    <div class="order-product">
+                        <div class="order-product__image">
+                            <div class="order-product-img">
+                                <img src="{{ product_warehouse_info.product.image.url }}" alt="">
+                            </div>
+                        </div>
+                        <div class="order-product-info">
+                            <div class="order-product__title">
+                                <p>{{ product_warehouse_info.product.title }}</p>
+                            </div>
+                            <div class="order-product__text">
+                                <p>Размер: {{ product_warehouse_info.product_size }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    {% else %}
+        <div class="message-container">
+            <div class="message-item">
+                <div class="message-item-title">
+                    Вы сейчас не оформляете заказ
+                </div>
+            </div>
+            <div class="message-item">
+                <div class="message-item__text">
+                    Пожалуйста, переходите на другую страницу
+                </div>
+            </div>
+            <div class="message-item">
+                <a href="{% url 'main:index' %}">
+                    <button class="btn btn-dark">На главную</button>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

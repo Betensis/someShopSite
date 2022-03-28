@@ -1,20 +1,22 @@
 from django.contrib.auth import login as auth_login, authenticate, login
 from django.contrib.auth.views import LogoutView, SuccessURLAllowedHostsMixin
 from django.shortcuts import resolve_url, redirect
-from django.utils.http import url_has_allowed_host_and_scheme, is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.generic import FormView
 from django.views.generic.base import TemplateView
 
+from account.consts import NEXT_URL_QUERY_PARAM_NAME
 from account.forms import AccountCreationForm
 from core import settings
 from core.services import PageViewMixin
+from main.utils.cache import delete_cached_header
 
 
 class AccountLoginView(PageViewMixin, SuccessURLAllowedHostsMixin, TemplateView):
     template_name = "account/login.html"
     success_url = settings.LOGIN_REDIRECT_URL
     redirect_authenticated_user = True
-    redirect_field_name = "next"
+    redirect_field_name = NEXT_URL_QUERY_PARAM_NAME
 
     def get_success_url(self):
         url = self.get_redirect_url()
@@ -46,11 +48,14 @@ class AccountLoginView(PageViewMixin, SuccessURLAllowedHostsMixin, TemplateView)
             )
 
         login(request, user)
+        delete_cached_header(request.user.email)
         return redirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
         next_url = self.request.GET.get(self.redirect_field_name)
-        if next_url and is_safe_url(next_url, allowed_hosts=settings.ALLOWED_HOSTS):
+        if next_url and url_has_allowed_host_and_scheme(
+            next_url, allowed_hosts=settings.ALLOWED_HOSTS
+        ):
             return (
                 super().get_context_data(**kwargs)
                 | self.get_page_context_data()
@@ -68,7 +73,12 @@ class AccountCreationView(FormView, PageViewMixin):
     def form_valid(self, form):
         user = form.save()
         auth_login(self.request, user)
+        delete_cached_header(user.email)
         return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        post_result = super(AccountCreationView, self).post(request, *args, **kwargs)
+        return post_result
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
@@ -80,3 +90,8 @@ class AccountLogoutView(LogoutView, PageViewMixin):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs) | self.get_page_context_data()
+
+    def post(self, request, *args, **kwargs):
+        delete_cached_header(request.user.email)
+        super(AccountLogoutView, self).post(request, *args, **kwargs)
+        return super(AccountLogoutView, self).post(request, *args, **kwargs)

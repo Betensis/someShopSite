@@ -1,14 +1,14 @@
 from typing import Optional
 
 from django.http import Http404
+from django.urls import reverse
 from django.views.generic import ListView, DetailView
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 
+from account.utils.login import redirect_with_next
+from cart.entity.product_info import CartProductInfo
+from cart.services import CartService
 from core.services import PageViewMixin
 from main.utils.service.product import is_valid_sex_name
-from cart.services.cart import CartService
 from .config.product import ProductServiceListConfig, ProductServiceDetailConfig
 from .models import MainCategory, Category, Product, ProductWarehouseInfo
 from .services import ProductWarehouseInfoService
@@ -129,11 +129,10 @@ class ProductDetailView(PageViewMixin, DetailView):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.object = None
         self.product: Optional[Product] = None
         self.product_sizes: Optional[list[ProductWarehouseInfo.SizeChoice]] = None
-        self.cart_service = CartService()
         self.product_warehouse_info_service = ProductWarehouseInfoService()
+        self.cart_service = CartService()
 
     def get_queryset(self):
         return ProductService().set_config(ProductServiceDetailConfig).get_products()
@@ -142,11 +141,28 @@ class ProductDetailView(PageViewMixin, DetailView):
         product = super(ProductDetailView, self).get_object(queryset)
 
         self.product = product
-        self.product_sizes = ProductWarehouseInfoService().get_allowed_sizes_by_product(
-            product
+        self.product_sizes = (
+            self.product_warehouse_info_service.get_allowed_sizes_by_product(product)
         )
 
         return product
+
+    def post(self, request, pk: int):
+        if not request.user.is_authenticated:
+            return redirect_with_next(reverse("main:product-detail", kwargs={"pk": pk}))
+
+        size = request.POST.get("size")
+        if size is None:
+            return self.get(request, pk)
+
+        product_info = CartProductInfo(product_id=pk, size=size)
+        cart, _ = self.cart_service.get_or_create_cart(self.request)
+        if not self.cart_service.is_product_in_cart(cart, product_info):
+            self.cart_service.add_product(
+                self.request, CartProductInfo(product_id=pk, size=size)
+            )
+
+        return self.get(request, pk)
 
     def get_title(self):
         if self.product is None:
@@ -157,34 +173,5 @@ class ProductDetailView(PageViewMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) | self.get_page_context_data()
         context[self.product_sizes_context_name] = self.product_sizes
-        cart, _ = self.cart_service.get_or_create_cart(self.request.user)
-        context["is_product_added_to_cart"] = any(
-            map(
-                lambda product_info: product_info.product == self.product,
-                self.cart_service.get_all_product_infos_by_cart(cart),
-            )
-        )
+
         return context
-
-    @method_decorator(login_required)
-    def post(self, request, pk: int):
-        self.object = self.get_object()
-        size = request.POST.get("size")
-        context = self.get_context_data(object=self.object)
-        if size is None:
-            context |= {"errors": ["Выберите размер"]}
-            return render(request, "main/product_detail.html", context)
-
-        warehouse_info = (
-            self.product_warehouse_info_service.get_or_none_product_warehouse_info(
-                pk, size
-            )
-        )
-
-        if warehouse_info is None:
-            context |= {"errors": ["Выбран недоступный размер"]}
-            return render(request, "main/product_detail.html", context)
-
-        self.cart_service.add_product(request.user, warehouse_info)
-
-        return render(request, "main/product_detail.html", context)
