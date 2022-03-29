@@ -10,8 +10,6 @@ __pycache__/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-media
-
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
 # <django-project-name>/staticfiles/
@@ -200,7 +198,7 @@ cython_debug/
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
 # .idea/artifacts
-# .idea/compiler.xml
+# .idea/compiler.xmlstatic/
 # .idea/jarRepositories.xml
 # .idea/modules.xml
 # .idea/*.iml
@@ -227,7 +225,7 @@ out/
 atlassian-ide-plugin.xml
 
 # Cursive Clojure plugin
-.idea/replstate.xml
+.idea/replstate.xmlstatic/
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
@@ -236,7 +234,7 @@ crashlytics-build.properties
 fabric.properties
 
 # Editor-based Rest Client
-.idea/httpRequests
+.idea/httpRequestsstatic/
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
@@ -273,4 +271,7 @@ fabric.properties
 
 .idea/
 # End of https://www.toptal.com/developers/gitignore/api/git,django,pycharm
-db.sqlite3
+.vscode/
+*/migrations/
+
+/cache/

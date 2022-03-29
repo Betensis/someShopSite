@@ -9,20 +9,27 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
+from importlib import import_module
 from pathlib import Path
 
+import dotenv
+from django.urls import reverse_lazy
+
 from .utils import env
+
+dotenv.load_dotenv(dotenv_path=Path("core/.env"))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+TMP_DIR = BASE_DIR / "tmp"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-qn0n$_00#*h_7gl5^at6^-mhqx(iu07jv4ji+p07nmtsk)o^it"
+SECRET_KEY = env.get_str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.get_bool("DEBUG", False)
@@ -33,8 +40,15 @@ ALLOWED_HOSTS = [
     env.get_str("ALLOWED_HOST", ""),
 ]
 
+APPS = [
+    "main",
+    "account",
+    "cart",
+]
 
-# Application definition
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -43,7 +57,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-]
+    "djmoney",
+] + APPS
+if DEBUG:
+    INSTALLED_APPS.append("debug_toolbar")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -54,13 +71,17 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+if DEBUG:
+    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -75,31 +96,33 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = (
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
+
+CACHES = (
     {
         "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": env.get_str("REDIS_CONNECTION"),
         }
     }
-    if DEBUG
+    if not DEBUG
     else {
         "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": env.get_str("DB_NAME"),
-            "USER": env.get_str('DB_USER'),
-            "PASSWORD": env.get_str('DB_PASSWORD'),
-            "HOST": env.get_str("DB_HOST"),
-            "PORT": env.get_int("DB_POST", 5432),
+            "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+            "LOCATION": TMP_DIR / "cache",
         }
     }
 )
 
-
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -118,11 +141,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ru"
 
 TIME_ZONE = "UTC"
 
@@ -132,13 +154,52 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "static"
+STATICFILES_DIRS = [
+    BASE_DIR / "main/static",
+    BASE_DIR / "vendor/static",
+]
+
+SessionStore = import_module(SESSION_ENGINE).SessionStore
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Media
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+LOGIN_REDIRECT_URL = reverse_lazy("main:index")
+LOGOUT_REDIRECT_URL = reverse_lazy("main:index")
+
+LOGIN_URL = reverse_lazy("account:login")
+LOGOUT_URL = reverse_lazy("account:logout")
+
+AUTH_USER_MODEL = "account.Account"
+
+PRODUCTS_IN_PAGE = 20
+
+DEBUG_TOOLBAR_PANELS = [
+    "debug_toolbar.panels.history.HistoryPanel",
+    "debug_toolbar.panels.versions.VersionsPanel",
+    "debug_toolbar.panels.timer.TimerPanel",
+    "debug_toolbar.panels.settings.SettingsPanel",
+    "debug_toolbar.panels.headers.HeadersPanel",
+    "debug_toolbar.panels.request.RequestPanel",
+    "debug_toolbar.panels.sql.SQLPanel",
+    "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+    "debug_toolbar.panels.templates.TemplatesPanel",
+    "debug_toolbar.panels.cache.CachePanel",
+    "debug_toolbar.panels.signals.SignalsPanel",
+    "debug_toolbar.panels.logging.LoggingPanel",
+    "debug_toolbar.panels.redirects.RedirectsPanel",
+    "debug_toolbar.panels.profiling.ProfilingPanel",
+]
+
+SITE_NAME = "SomeShopSite"

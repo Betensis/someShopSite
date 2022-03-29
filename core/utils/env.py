@@ -1,10 +1,5 @@
 import os
 
-
-class EnvironmentError(Exception):
-    pass
-
-
 true_values = (
     "True",
     "true",

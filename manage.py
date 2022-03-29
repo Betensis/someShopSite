@@ -2,13 +2,9 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from pathlib import Path
-
-import dotenv
 
 
 def main():
-    dotenv.load_dotenv(dotenv_path=Path('core/.env'))
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
     try:

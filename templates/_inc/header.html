@@ -1,0 +1,41 @@
+{% load static %}
+
+<header>
+    <div class="header__section">
+        <div class="header__item">
+            <a class="logo-icon" href="{% url 'main:index' %}">
+                <svg class="logo-icon">
+                    <use href="{% static '/main/icon/sprites.svg' %}#home"></use>
+                </svg>
+            </a>
+        </div>
+        <a class="header__item header__item-text" href="{% url 'main:sex' 'man' %}">Мужская</a>
+        <a class="header__item header__item-text" href="{% url 'main:sex' 'woman' %}">Женская</a>
+    </div>
+    {% if user.is_staff %}
+        <div class="header__section">
+            <a class="header__item header__item-text" href="/admin/">Войти в админку</a>
+        </div>
+    {% endif %}
+    <div class="header__section">
+        {% if user.is_authenticated %}
+            <a href="{% url 'cart:cart' %}" class="cart-icon">
+                <svg class="cart-icon">
+                    <use href="{% static '/main/icon/sprites.svg' %}#cart"></use>
+                </svg>
+            </a>
+            <p class="header__item header__item-text">{{ request.user.email }}</p>
+            <a href="{% url 'account:logout' %}" class="header__item header__item-text">Выйти</a>
+        {% else %}
+            <div class="header__item">
+                <a href="{% url 'cart:cart' %}" class="cart-icon">
+                    <svg class="cart-icon">
+                        <use href="{% static '/main/icon/sprites.svg' %}#cart"></use>
+                    </svg>
+                </a>
+            </div>
+            <a class="header__item header__item-text" href="{% url 'account:login' %}">Войти</a>
+            <a class="header__item header__item-text" href="{% url 'account:signup' %}">Зарегаться</a>
+        {% endif %}
+    </div>
+</header>

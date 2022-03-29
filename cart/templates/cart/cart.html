@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static '/cart/css/cart.css' %}">
+{% endblock %}
+
+{% block js_register %}
+    <script src="{% static '/cart/js/' %}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="cart-container">
+        <div class="cart-product-container">
+            {% for product_info in product_infos %}
+                <div class="cart-product">
+                    <input type="hidden" name="product_id" value="{{ product_info.product.id }}">
+                    <img src="{{ product_info.product.image.url }}" class="cart-product-image">
+                    <div class="cart-product-description">
+                        <div class="cart-product-description__title">
+                            {{ product_info.product.title }}
+                        </div>
+                        <div class="cart-product-description__size">
+                            Размер: {{ product_info.product_size }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="cart-aggregated-info">
+            <form method="post" action="{% url 'cart:order' %}" class="cart-user-info-form">
+                {% csrf_token %}
+                <p class="form-title">
+                    Введите свои данные
+                </p>
+                <div class="field">
+                    <label for="cart-form-email" class="field__label">Email</label>
+                    <input id="cart-form-email" required type="text" class="field__input" name="email"
+                           value="{{ user.email }}">
+                </div>
+                <div class="field">
+                    <label for="cart-form-phone" class="field__label">Телефон</label>
+                    <input id="cart-form-phone" required type="text" name="phone" class="field__input">
+                </div>
+                <div class="field">
+                    <label for="cart-form-place" class="field__label">Место доставки</label>
+                    <input id="cart-form-place" required type="text" name="place" class="field__input">
+                </div>
+                <button id="submit-cart-order" class="btn btn-dark">
+                    Подтвердить
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

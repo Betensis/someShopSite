@@ -1,0 +1,43 @@
+.account-form-wrapper {
+    display: flex;
+    border-radius: 14px;
+    flex-direction: column;
+    width: 35%;
+    height: 100%;
+    margin: 90px auto 0 auto;
+    padding-bottom: 15px;
+    align-items: center;
+    font-family: 'Lato', sans-serif;
+    background-color: #e3e2e2;
+}
+
+.form-title p {
+    font-size: 25px;
+}
+
+.field {
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+    margin: 5px;
+}
+
+.field__label {
+    color: #656565;
+}
+
+.field__input {
+    width: 100%;
+    margin: 0 auto 15px 0;
+}
+
+.form-submit-btn {
+    display: block;
+    margin: auto;
+    border-radius: 5px;
+    border: 1px #000000 solid;
+}
+
+.invalid-feedback {
+    display: block;
+}
