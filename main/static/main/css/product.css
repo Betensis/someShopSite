@@ -5,6 +5,11 @@
     --card-border-radius: 9px;
 }
 
+.container {
+    margin: 0 auto;
+    width: 1140px;
+}
+
 .product-container {
     display: flex;
     overflow: hidden;
