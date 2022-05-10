@@ -27,7 +27,7 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="cart-aggregated-info">
+        <div class="cart-aggregated-info" style="background-color: #ECEBBD; padding: 10px">
             <form method="post" action="{% url 'cart:order' %}" class="cart-user-info-form">
                 {% csrf_token %}
                 <p class="form-title">
