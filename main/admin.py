@@ -47,6 +47,7 @@ class ProductAdmin(admin.ModelAdmin):
         "category",
         "brand",
         "sex",
+        "last_update",
         "get_info_tags",
     ]
 

@@ -162,9 +162,21 @@ class Product(BaseModel):
     info_tags = models.ManyToManyField(
         ProductInfoTags,
     )
+    last_update = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        # create new product if price changes. Otherwise, execute like just .save()
+        if self.pk is None:
+            return super(Product, self).save(*args, **kwargs)
+
+        last_product_record = self.__class__.objects.get_or_none(pk=self.pk)
+        if last_product_record is not None and last_product_record.price != self.price:
+            self.pk = None
+
+        return super(Product, self).save(*args, **kwargs)
 
 
 class ProductWarehouseInfo(BaseModel):
