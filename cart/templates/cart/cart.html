@@ -13,9 +13,9 @@
     <div class="cart-container">
         <div class="cart-product-container">
             {% for product_info in product_infos %}
-                <div class="cart-product">
+                <div class="cart-product" style="background-color: #c0c0c0;border-radius: 8px;box-shadow: 0 20px 20px rgb(48 52 59 / 7%);">
                     <input type="hidden" name="product_id" value="{{ product_info.product.id }}">
-                    <img src="{{ product_info.product.image.url }}" class="cart-product-image">
+                    <img src="{{ product_info.product.image.url }}" class="cart-product-image" style="padding: 10px">
                     <div class="cart-product-description">
                         <div class="cart-product-description__title">
                             {{ product_info.product.title }}
