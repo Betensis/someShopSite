@@ -1,6 +1,6 @@
 from typing import Type, Optional
 
-from django.db.models import Q, QuerySet
+from django.db.models import Q, QuerySet, Max, Subquery
 
 from main.config.product import ProductServiceConfig
 from main.models import Product, MainCategory, Category, Brand
@@ -17,6 +17,7 @@ class ProductService:
         self.__select_related_fields = []
         self.__prefetch_related_fields = []
         self.__selected_values = []
+        self.__only_last_updated_products = True
         if config is not None:
             self.set_config(config)
 
@@ -63,6 +64,9 @@ class ProductService:
 
     def ids_in(self, product_ids: list[int]):
         return self.__set_filter_options(id__in=product_ids)
+
+    def only_last_updated(self, value: bool):
+        self.__only_last_updated_products = value
 
     def _add_select_related_fields(self, *args):
         self.__select_related_fields.extend(*args)

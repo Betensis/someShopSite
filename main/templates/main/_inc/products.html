@@ -1,13 +1,14 @@
 {% load static %}
-<div class="product-container">
-    {% for product in products %}
+<div class="container">
+    <div class="product-container">
+        {% for product in products %}
         <div class="product-card">
             <div class="product-cart__image">
                 <img src="{{ product.image_url }}" alt="...">
             </div>
             <div class="product-cart-info">
                 <div class="product-cart-info__title">
-                    <p>{{ product.title|truncatechars:90 }}</p>
+                    <p style="text-align: center; font-size: 16px">{{ product.title|truncatechars:90 }}</p>
                 </div>
                 <div class="product__show-more-btn">
                     <a href="{% url 'main:product-detail' product.id %}">
@@ -18,5 +19,6 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
