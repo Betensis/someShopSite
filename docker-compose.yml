@@ -10,6 +10,11 @@ services:
       POSTGRES_PASSWORD: "superpsqpasswd"
     ports:
       - "5432:5432"
+  redis:
+    container_name: 'redis'
+    image: 'redis:3.2.0'
+    ports:
+      - '6379:6379'
   web:
     build:
       context: .

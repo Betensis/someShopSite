@@ -113,8 +113,8 @@ DATABASES = {
 CACHES = (
     {
         "default": {
-            "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-            "LOCATION": TMP_DIR / "cache",
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": env.get_str("REDIS_CONNECTION"),
         }
     }
 )
