@@ -101,20 +101,17 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env.get_str('DB_NAME'),
+        'USER': env.get_str('DB_USER'),
+        'PASSWORD': env.get_str('DB_PASSWORD'),
+        'HOST': env.get_str('DB_HOST'),
+        'PORT': int(env.get_str('DB_PORT')),
     }
 }
 
 CACHES = (
     {
-        "default": {
-            "BACKEND": "django.core.cache.backends.redis.RedisCache",
-            "LOCATION": env.get_str("REDIS_CONNECTION"),
-        }
-    }
-    if not DEBUG
-    else {
         "default": {
             "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
             "LOCATION": TMP_DIR / "cache",
