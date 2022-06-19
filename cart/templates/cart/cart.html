@@ -13,7 +13,7 @@
     <div class="cart-container">
         <div class="cart-product-container">
             {% for product_info in product_infos %}
-                <div class="cart-product" style="background-color: #c0c0c0;border-radius: 8px;box-shadow: 0 20px 20px rgb(48 52 59 / 7%);">
+                <div class="cart-product" style="background-color: #fff;border-radius: 8px;box-shadow: 0 20px 20px rgb(48 52 59 / 7%);">
                     <input type="hidden" name="product_id" value="{{ product_info.product.id }}">
                     <img src="{{ product_info.product.image.url }}" class="cart-product-image" style="padding: 10px">
                     <div class="cart-product-description">
@@ -27,23 +27,23 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="cart-aggregated-info" style="background-color: #ECEBBD; padding: 10px">
+        <div class="cart-aggregated-info" style="background-color: #fff;">
             <form method="post" action="{% url 'cart:order' %}" class="cart-user-info-form">
                 {% csrf_token %}
-                <p class="form-title">
+                <div class="form-title" style="margin:10px 0">
                     Введите свои данные
-                </p>
+                </div>
                 <div class="field">
-                    <label for="cart-form-email" class="field__label">Email</label>
+                    <label for="cart-form-email" class="field__label" style="padding-left:3px; margin-bottom: 2px">Email</label>
                     <input id="cart-form-email" required type="text" class="field__input" name="email"
                            value="{{ user.email }}">
                 </div>
                 <div class="field">
-                    <label for="cart-form-phone" class="field__label">Телефон</label>
+                    <label for="cart-form-phone" class="field__label" style="padding-left:3px;margin-bottom: 2px">Телефон</label>
                     <input id="cart-form-phone" required type="text" name="phone" class="field__input">
                 </div>
                 <div class="field">
-                    <label for="cart-form-place" class="field__label">Место доставки</label>
+                    <label for="cart-form-place" class="field__label" style="padding-left:3px;margin-bottom: 2px">Место доставки</label>
                     <input id="cart-form-place" required type="text" name="place" class="field__input">
                 </div>
                 <button id="submit-cart-order" class="btn btn-dark">

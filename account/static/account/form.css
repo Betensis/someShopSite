@@ -1,14 +1,12 @@
 .account-form-wrapper {
     display: flex;
-    border-radius: 14px;
     flex-direction: column;
-    width: 35%;
-    height: 100%;
     margin: 90px auto 0 auto;
     padding-bottom: 15px;
     align-items: center;
-    font-family: 'Lato', sans-serif;
-    background-color: #e3e2e2;
+    background-color: #fff;
+    width: 600px;
+    height: 382px;
 }
 
 .form-title p {
@@ -28,7 +26,7 @@
 
 .field__input {
     width: 100%;
-    margin: 0 auto 15px 0;
+    margin: 0 auto 20px 0;
 }
 
 .form-submit-btn {

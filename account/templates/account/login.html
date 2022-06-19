@@ -1,17 +1,17 @@
 {% extends 'account/base-account-form.html' %}
 {% block account-form %}
-    <div class="form-title">
+    <div class="form-title" style="margin-top: 50px;font-family: 'Raleway', sans-serif;">
         <p>Войти</p>
     </div>
-    <form action="{% url 'account:login' %}{% if next %}?next={{ next }}{% endif %}" method="post">
+    <form action="{% url 'account:login' %}{% if next %}?next={{ next }}{% endif %}" method="post" style="font-family: 'Raleway', sans-serif;">
         {% csrf_token %}
         <div class="field">
-            <label for="email" class="field__label">Email</label>
-            <input name="email" required type="email" id="email" class="field__input" value="{{ email }}">
+            <label for="email" class="field__label"></label>
+            <input placeholder="Ваш e-mail" name="email" required type="email" id="email" class="field__input" value="{{ email }}" style="width:400px;height:50px">
         </div>
         <div class="field">
-            <label for="password" class="field__label">Пароль</label>
-            <input name="password" required type="password" id="password" class="field__input">
+            <label for="password" class="field__label"></label>
+            <input placeholder="Ваш пароль" name="password" required type="password" id="password" class="field__input" style="width:400px;height:50px">
         </div>
         {% if errors %}
             <div class="field">
@@ -20,6 +20,6 @@
                 {% endfor %}
             </div>
         {% endif %}
-        <input class="form-submit-btn btn btn-secondary" style="border: none" type="submit" value="Войти">
+        <input class="form-submit-btn btn btn-secondary" style="border: none;width: 400px;height: 50px;left: 100px;top: 282px;background: #E0BEA2;border-radius: 0px;" type="submit" value="Войти">
     </form>
 {% endblock %}
