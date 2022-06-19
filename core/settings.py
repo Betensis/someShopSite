@@ -101,23 +101,21 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env.get_str('DB_NAME'),
-        'USER': env.get_str('DB_USER'),
-        'PASSWORD': env.get_str('DB_PASSWORD'),
-        'HOST': env.get_str('DB_HOST'),
-        'PORT': int(env.get_str('DB_PORT')),
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env.get_str("DB_NAME"),
+        "USER": env.get_str("DB_USER"),
+        "PASSWORD": env.get_str("DB_PASSWORD"),
+        "HOST": env.get_str("DB_HOST"),
+        "PORT": int(env.get_str("DB_PORT")),
     }
 }
 
-CACHES = (
-    {
-        "default": {
-            "BACKEND": "django.core.cache.backends.redis.RedisCache",
-            "LOCATION": env.get_str("REDIS_CONNECTION"),
-        }
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": env.get_str("REDIS_CONNECTION"),
     }
-)
+}
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 # Password validation
