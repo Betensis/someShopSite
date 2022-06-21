@@ -9,14 +9,12 @@
 .cart-product-container {
     width: 70%;
     height: 100%;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
 }
 
 .cart-aggregated-info {
     width: 30%;
     background-color: #d3ffcc;
-    border-radius: 8px;
+    height:350px;
 }
 
 .cart-product-description {
@@ -42,8 +40,7 @@
 }
 
 .cart-user-info-form {
-    font-family: 'Lato', sans-serif;
-    margin: 8px 20px;
+    padding:20px;
     text-align: center;
 }
 

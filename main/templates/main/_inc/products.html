@@ -1,24 +1,26 @@
 {% load static %}
-<div class="container">
-    <div class="product-container">
-        {% for product in products %}
-        <div class="product-card" style=" box-shadow: 0 0 10px rgba(0,0,0,0.5);">
-            <div class="product-cart__image">
-                <img src="{{ product.image_url }}" alt="...">
-            </div>
-            <div class="product-cart-info">
-                <div class="product-cart-info__title">
-                    <p style="text-align: center; font-size: 16px">{{ product.title|truncatechars:90 }}</p>
+<div>
+    <div class="container" style="font-family: 'Raleway', sans-serif;">
+        <div class="product-container">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-cart__image" style="position: relative">
+                    <img src="{{ product.image_url }}" alt="...">
+                    <div class="product__show-more-btn">
+                        <a href="{% url 'main:product-detail' product.id %}">
+                            <button class="btn btn-dark product-card__btn" style="border-color: rgba(224, 190, 162, 0.75);background-color: rgba(224, 190, 162, 0.75);">
+                                Подробнее
+                            </button>
+                        </a>
+                    </div>
                 </div>
-                <div class="product__show-more-btn">
-                    <a href="{% url 'main:product-detail' product.id %}">
-                        <button class="btn btn-dark product-card__btn">
-                            Подробнее
-                        </button>
-                    </a>
+                <div class="product-cart-info">
+                    <div class="product-cart-info__title" style="margin-top:10px">
+                        <div style="text-align: center; font-size: 16px">{{ product.title|truncatechars:90 }}</div>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>

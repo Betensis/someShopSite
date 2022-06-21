@@ -1,7 +1,7 @@
 {% extends 'account/base-account-form.html' %}
 
 {% block account-form %}
-    <div class="form-title">
+    <div class="form-title" style="margin-top:20px">
         <p>Зарегистрироваться</p>
     </div>
     <form action="{% url 'account:signup' %}" method="post">
@@ -18,6 +18,6 @@
             <label for="password2" class="field__label">Повторите пароль</label>
             <input name="password2" required type="password" id="password2" class="field__input">
         </div>
-        <input class="form-submit-btn btn btn-secondary" style="border: none" type="submit" value="Зарегистрироваться">
+        <input class="form-submit-btn btn btn-secondary" style="border: none;background: #E0BEA2;width: 400px;height: 50px;left: 100px;top: 282px;background: #E0BEA2;border-radius: 0px;" type="submit" value="Зарегистрироваться">
     </form>
 {% endblock %}

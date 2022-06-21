@@ -1,14 +1,12 @@
 .message-container {
     display: flex;
     flex-direction: column;
-    font-family: 'Lato', sans-serif;
     width: max-content;
     margin: 70px auto;
     align-items: center;
     text-align: center;
-    background-color: #a7d0bc;
+    background-color: #fff;
     padding: 15px;
-    border-radius: 10px;
 }
 
 .message-item {
